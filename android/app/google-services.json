@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "640147380109",
+    "project_id": "mse-yonsei",
+    "storage_bucket": "mse-yonsei.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640147380109:android:d37ce421aa670838de0fc4",
+        "android_client_info": {
+          "package_name": "com.waobab.drag_expandable_list"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640147380109-6u9ptfm8svu22rv9h44nbnn7mn5c9ugj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN0UpfxZzldZOhcYJu3aLfSCNfLc19Fkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640147380109-6u9ptfm8svu22rv9h44nbnn7mn5c9ugj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "640147380109-5pujrihkj06c5ipdsp8ch6if7id11a92.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.waobab.dragExpandableList"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
