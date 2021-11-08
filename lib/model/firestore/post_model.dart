@@ -3,6 +3,7 @@ import 'package:mse_yonsei/cosntants/firestore_keys.dart';
 
 class PostModel {
   final String? postKey;
+  final String? userKey;
   final String? name;
   final String? phone_number;
   final String? url;
@@ -14,6 +15,7 @@ class PostModel {
   PostModel.fromMap(Map<String, dynamic>? map, this.postKey,
       {required this.reference})
       : name = map![KEY_NAME],
+        userKey = map![KEY_USERKEY],
         phone_number = map![KEY_PHONE_NUMBER],
         url = map![KEY_URL],
         lab_url = map![KEY_LAB_URL],
@@ -24,10 +26,11 @@ class PostModel {
       : this.fromMap(snapshot.data(), snapshot.id,
             reference: snapshot.reference);
 
-  static Map<String, dynamic> getMapForCreate({required String name, String? phone_number, String? url, required String category}) {
+  static Map<String, dynamic> getMapForCreate({required String name, String? phone_number, String? url, required String category, String? userKey}) {
     // return type은 Map<String, dynamic>
     Map<String, dynamic> map = Map();
     map[KEY_NAME] = name;
+    map[KEY_USERKEY] = userKey;
     map[KEY_PHONE_NUMBER] = phone_number;
     map[KEY_URL] = url;
     map[KEY_LAB_URL] = '';
@@ -36,5 +39,5 @@ class PostModel {
     return map;
   }
 
-  PostModel({this.postKey, this.name, this.phone_number, this.url, this.lab_url, this.professor_url, this.category, this.reference});       // for make internal example...
+  PostModel({this.postKey, this.name, this.userKey,this.phone_number, this.url, this.lab_url, this.professor_url, this.category, this.reference});       // for make internal example...
 }

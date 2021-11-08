@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
-import 'package:mse_yonsei/model/post_state.dart';
-import 'package:mse_yonsei/repo/user_network_repository.dart';
+import 'package:mse_yonsei/repo/post_network_repository.dart';
 import 'package:mse_yonsei/screens/add_address_screen.dart';
+import 'package:mse_yonsei/screens/detail_screen.dart';
 import 'package:mse_yonsei/screens/setting_screen.dart';
 import 'package:mse_yonsei/widgets/background.dart';
-import 'package:mse_yonsei/expandable_tree_menu.dart';
 import 'package:mse_yonsei/flutter_speed_dial_menu_button.dart';
 import 'package:mse_yonsei/inner_list.dart';
 import 'package:mse_yonsei/item_list.dart';
@@ -27,6 +26,11 @@ class ExpansionTileExample extends StatefulWidget {
 }
 
 class _ListTileExample extends State<ExpansionTileExample> {
+
+  List<PostModel> _callList = [];
+  List<PostModel> _privateEnterpriseList = [];
+  List<PostModel> _otherList = [];
+
   bool _isShowDial = false;
   final nodes = <TreeNode>[];
 
@@ -40,7 +44,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
     // Load the data from somewhere;
     return await _dataLoad();
   }
-  List<InnerList> outsourceList = ItemList().outsourceList;
+  List<InnerList> _outsourceList = ItemList().outsourceList;
 
   // late List<InnerList> _lists;
 
@@ -65,68 +69,90 @@ class _ListTileExample extends State<ExpansionTileExample> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: Colors.blueGrey,
-      appBar: AppBar(
-        title: Text('Mse Yonsei'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SettingScreen()));
-              },
-              icon: Icon(Icons.settings)),
-        ],
-      ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Background(file_name: 'homebackground'),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Opacity(
-                opacity: 0.4,
-                child: Container(
-                  child: ExpandableTree(
-                    nodes: nodes,
-                    nodeBuilder: _nodeBuilder,
-                    onSelect: (node) => _nodeSelected(context, node),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: DragAndDropLists(
-                  children: List.generate(
-                      outsourceList.length, (index) => _buildList(index)),
-                  onItemReorder: _onItemReorder,
-                  onListReorder: _onListReorder,
-                  // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
-
-                  listGhost: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 30.0),
-                    child: Center(
+    return StreamProvider<List<PostModel>>.value(
+      initialData: [],
+      value: postNetwokRepository.getAllPosts(),
+      child: Consumer(
+        builder: (BuildContext context, List<PostModel> posts, Widget? child) {
+          _callList = [];
+          _privateEnterpriseList = [];
+          _otherList = [];4
+          for (int i = 0; i < posts.length; i++) {
+            if (posts[i].category == 'CALL') {
+              _callList.add(posts[i]);
+            } else if (posts[i].category == 'PRIVATE_ENTERPRISE') {
+              _privateEnterpriseList.add(posts[i]);
+            } else if (posts[i].category == 'OTHER') {
+              _otherList.add(posts[i]);
+            }
+          }
+          return Scaffold(
+            backgroundColor: Colors.blueGrey,
+            appBar: AppBar(
+              title: Text('Mse Yonsei'),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => SettingScreen()));
+                    },
+                    icon: Icon(Icons.settings)),
+              ],
+            ),
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                Background(file_name: 'homebackground'),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    /*
+                    Opacity(
+                      opacity: 0.4,
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 30.0, horizontal: 100.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(7.0),
-                        ),
-                        child: Icon(
-                          Icons.add_box,
-                          color: Colors.pink,
+                        child: ExpandableTree(
+                          nodes: nodes,
+                          nodeBuilder: _nodeBuilder,
+                          onSelect: (node) => _nodeSelected(context, node),
                         ),
                       ),
                     ),
-                  ),
+                    */
+                    Expanded(
+                      child: DragAndDropLists(
+                        children: List.generate(
+                            _outsourceList.length, (index) => _buildList(index)),
+                        onItemReorder: _onItemReorder,
+                        onListReorder: _onListReorder,
+                        // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
+
+                        listGhost: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30.0),
+                          child: Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 30.0, horizontal: 100.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(7.0),
+                              ),
+                              child: Icon(
+                                Icons.add_box,
+                                color: Colors.pink,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            floatingActionButton: _getFloatingActionButton(),
+          );
+        },
       ),
-      floatingActionButton: _getFloatingActionButton(),
     );
   }
   Widget _getFloatingActionButton() {
@@ -201,7 +227,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
   }
 
   _buildList(int outerIndex) {
-    var innerList = outsourceList[outerIndex];
+    var innerList = _outsourceList[outerIndex];
     return DragAndDropListExpansion(
       // canDrag: outerIndex==0?false:true,     // 큰 list가 drag할 수 있는가?
       canDrag: true,
@@ -236,15 +262,15 @@ class _ListTileExample extends State<ExpansionTileExample> {
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem =
-          outsourceList[oldListIndex].children.removeAt(oldItemIndex);
-      outsourceList[newListIndex].children.insert(newItemIndex, movedItem);
+          _outsourceList[oldListIndex].children.removeAt(oldItemIndex);
+      _outsourceList[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
 
   _onListReorder(int oldListIndex, int newListIndex) {
     setState(() {
-      var movedList = outsourceList.removeAt(oldListIndex);
-      outsourceList.insert(newListIndex, movedList);
+      var movedList = _outsourceList.removeAt(oldListIndex);
+      _outsourceList.insert(newListIndex, movedList);
     });
   }
 }

@@ -15,16 +15,16 @@ class _PracticeScreenState extends State<PracticeScreen> {
   List<PostModel> _privateEnterpriseList = [];
   List<PostModel> _otherList = [];
 
-  List<dynamic> categories = [
-    'CALL',
-    'OTHER',
-    'PRIVATE_ENTERPRISE',
-    'PROFESSOR_LAB',
-    'PUBLIC_ENTERPRISE',
-    'YONSEI',
-    'YONSEI_MSE',
-    'YOUTUBE'
-  ];
+  // List<dynamic> categories = [
+  //   'CALL',
+  //   'OTHER',
+  //   'PRIVATE_ENTERPRISE',
+  //   'PROFESSOR_LAB',
+  //   'PUBLIC_ENTERPRISE',
+  //   'YONSEI',
+  //   'YONSEI_MSE',
+  //   'YOUTUBE'
+  // ];
 
   @override
   Widget build(BuildContext context) {

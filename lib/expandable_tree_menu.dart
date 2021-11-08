@@ -1,5 +1,6 @@
 import 'package:expandable_tree_menu/expandable_tree_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:mse_yonsei/screens/detail_screen.dart';
 
 
 class Expandable extends StatefulWidget {
@@ -72,25 +73,6 @@ class _ExpandableState extends State<Expandable> {
 }
 
 
-
-// A less contrived example would use a DataModel as type for the value
-class DetailPage extends StatelessWidget {
-  final value;
-
-  const DetailPage({Key? key, this.value}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(value.toString()),
-      ),
-      body: Center(
-        child: Text(value.toString()),
-      ),
-    );
-  }
-}
 
 Future<List<TreeNode>> _dataLoad() async {
   // Fetch the data here

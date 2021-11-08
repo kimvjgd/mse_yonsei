@@ -45,23 +45,23 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Consumer<FirebaseAuthState>(builder: (BuildContext context,
             FirebaseAuthState? firebaseAuthState, Widget? child) {
-          return PracticeScreen();
-          // switch (firebaseAuthState!.firebaseAuthStatus) {
-          //   case FirebaseAuthStatus.signout:
-          //     _clearUserModel(context);
-          //     _currentWidget = AuthScreen();
-          //     break;
-          //   case FirebaseAuthStatus.signin:
-          //     _initUserModel(firebaseAuthState, context);
-          //     _currentWidget = MyHomePage();
-          //     break;
-          //   default:
-          //     _currentWidget = MyProgressIndicator(containerSize: 20);
-          // }
-          // return AnimatedSwitcher(
-          //   duration: Duration(milliseconds: 300),
-          //   child: _currentWidget,
-          // );
+          // return PracticeScreen();
+          switch (firebaseAuthState!.firebaseAuthStatus) {
+            case FirebaseAuthStatus.signout:
+              _clearUserModel(context);
+              _currentWidget = AuthScreen();
+              break;
+            case FirebaseAuthStatus.signin:
+              _initUserModel(firebaseAuthState, context);
+              _currentWidget = MyHomePage();
+              break;
+            default:
+              _currentWidget = MyProgressIndicator(containerSize: 20);
+          }
+          return AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: _currentWidget,
+          );
         }),
       ),
     );
