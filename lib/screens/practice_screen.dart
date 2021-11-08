@@ -11,8 +11,21 @@ class PracticeScreen extends StatefulWidget {
 }
 
 class _PracticeScreenState extends State<PracticeScreen> {
+  List<PostModel> _callList = [];
+  List<PostModel> _privateEnterpriseList = [];
+  List<PostModel> _otherList = [];
 
-  List<dynamic> categories = ['CALL', 'OTHER', 'PRIVATE_ENTERPRISE', 'PROFESSOR_LAB', 'PUBLIC_ENTERPRISE', 'YONSEI', 'YONSEI_MSE', 'YOUTUBE'];
+  List<dynamic> categories = [
+    'CALL',
+    'OTHER',
+    'PRIVATE_ENTERPRISE',
+    'PROFESSOR_LAB',
+    'PUBLIC_ENTERPRISE',
+    'YONSEI',
+    'YONSEI_MSE',
+    'YOUTUBE'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<PostModel>>.value(
@@ -20,24 +33,71 @@ class _PracticeScreenState extends State<PracticeScreen> {
       value: postNetwokRepository.getAllPosts(),
       child: Consumer(builder:
           (BuildContext context, List<PostModel> posts, Widget? child) {
+        _callList = [];
+        _privateEnterpriseList = [];
+        _otherList = [];
+        for (int i = 0; i < posts.length; i++) {
+          if (posts[i].category == 'CALL') {
+            _callList.add(posts[i]);
+          } else if (posts[i].category == 'PRIVATE_ENTERPRISE') {
+            _privateEnterpriseList.add(posts[i]);
+          } else if (posts[i].category == 'OTHER') {
+            _otherList.add(posts[i]);
+          }
+        }
         return Scaffold(
-          // body: Container(),
-          body: ListView.builder(
-            itemBuilder: (context, index) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          body: Stack(children: [
+            Column(
               children: [
-                Container(
-                  child: Text(posts[index].name!??'?'),
-                ),
-                Container(
-                  child: Text(posts[index].category!),
-                ),
+                _expandedCategory(_callList),
+                _expandedCategory(_privateEnterpriseList),
+                _expandedCategory(_otherList),
               ],
             ),
-            itemCount: posts.length,
-          ),
+
+          ]),
         );
+        // return Scaffold(
+        //   body: Column(
+        //     children: [
+        //       Expanded(
+        //         child: Container(
+        //           child: ListView.builder(
+        //             itemBuilder: (context, index) {
+        //               if (posts[index].category == 'OTHER') {
+        //                 return Row(
+        //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                   children: [
+        //                     Container(
+        //                       child: Text(posts[index].name! ?? '?'),
+        //                     ),
+        //                     Container(
+        //                       child: Text(posts[index].category!),
+        //                     ),
+        //                   ],
+        //                 );
+        //               }else {
+        //                 return Container();
+        //               }
+        //             },
+        //             itemCount: posts.length,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // );
       }),
     );
+  }
+
+  Expanded _expandedCategory(List<PostModel> specific) {
+    return Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => ListTile(
+                      title: Text(specific[index].name!),
+                    ),
+                    itemCount: specific.length,
+                  ));
   }
 }
