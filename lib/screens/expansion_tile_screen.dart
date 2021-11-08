@@ -32,6 +32,12 @@ class _ListTileExample extends State<ExpansionTileExample> {
   List<PostModel> _callList = [];
   List<PostModel> _privateEnterpriseList = [];
   List<PostModel> _otherList = [];
+  List<PostModel> _govFundInstList = [];
+  List<PostModel> _professorList = [];
+  List<PostModel> _labList = [];
+  List<PostModel> _yonseiList = [];
+  List<PostModel> _yonseiMSEList = [];
+  List<PostModel> _youtubeList = [];
 
   bool _isShowDial = false;
   final nodes = <TreeNode>[];
@@ -75,10 +81,26 @@ class _ListTileExample extends State<ExpansionTileExample> {
       value: postNetwokRepository.getAllPosts(),
       child: Consumer(
         builder: (BuildContext context, List<PostModel> posts, Widget? child) {
+          _myList = [];
           _callList = [];
           _privateEnterpriseList = [];
           _otherList = [];
-          print('@@@${posts.length}');
+          _govFundInstList = [];
+          _professorList = [];
+          _labList = [];
+          _yonseiList = [];
+          _yonseiMSEList = [];
+          _youtubeList = [];
+          _outsourceList[0].children = [];
+          _outsourceList[1].children = [];
+          _outsourceList[2].children = [];
+          _outsourceList[3].children = [];
+          _outsourceList[4].children = [];
+          _outsourceList[5].children = [];
+          _outsourceList[6].children = [];
+          _outsourceList[7].children = [];
+          _outsourceList[8].children = [];
+
           for (int i = 0; i < posts.length; i++) {
             if (posts[i].userKey == Provider.of<UserModelState>(context, listen: false).userModel.userKey) {
               // 내 userkey와 같은 것들만 받아와준다.
@@ -86,13 +108,36 @@ class _ListTileExample extends State<ExpansionTileExample> {
             } else if(posts[i].userKey == null || posts[i].userKey == '') {
               if (posts[i].category == 'CALL') {
                 _callList.add(posts[i]);
+                _outsourceList[6].children.add(posts[i]);
               } else if (posts[i].category == 'PRIVATE_ENTERPRISE') {
                 _privateEnterpriseList.add(posts[i]);
+                _outsourceList[4].children.add(posts[i]);
               } else if (posts[i].category == 'OTHER') {
                 _otherList.add(posts[i]);
+                _outsourceList[8].children.add(posts[i]);
+              }else if (posts[i].category == 'GOV_FUND_INST') {
+                _govFundInstList.add(posts[i]);
+                _outsourceList[5].children.add(posts[i]);
+              }else if (posts[i].category == 'PROFESSOR') {
+                _professorList.add(posts[i]);
+                _outsourceList[2].children.add(posts[i]);
+              }else if (posts[i].category == 'LAB') {
+                _labList.add(posts[i]);
+                _outsourceList[3].children.add(posts[i]);
+              }else if (posts[i].category == 'YONSEI') {
+                _yonseiList.add(posts[i]);
+                _outsourceList[0].children.add(posts[i]);
+              }else if (posts[i].category == 'YONSEI_MSE') {
+                _yonseiMSEList.add(posts[i]);
+                _outsourceList[1].children.add(posts[i]);
+              }else if (posts[i].category == 'YOUTUBE') {
+                _youtubeList.add(posts[i]);
+                _outsourceList[7].children.add(posts[i]);
               }
             }
           }
+
+
           return Scaffold(
             backgroundColor: Colors.blueGrey,
             appBar: AppBar(
@@ -113,10 +158,6 @@ class _ListTileExample extends State<ExpansionTileExample> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _expandedCategory(_myList),
-                    _expandedCategory(_callList),
-                    _expandedCategory(_privateEnterpriseList),
-                    _expandedCategory(_otherList),
                     /*
                     Opacity(
                       opacity: 0.4,
@@ -166,17 +207,6 @@ class _ListTileExample extends State<ExpansionTileExample> {
       ),
     );
   }
-// 곧 지울꺼야
-  Expanded _expandedCategory(List<PostModel> specific) {
-    return Expanded(
-        child: ListView.builder(
-          itemBuilder: (context, index) => ListTile(
-            title: Text(specific[index].name!,style: TextStyle(color: Colors.white),),
-          ),
-          itemCount: specific.length,
-        ));
-  }
-// 곧 지울꺼야
 
 
 
@@ -270,17 +300,24 @@ class _ListTileExample extends State<ExpansionTileExample> {
       // leading: Icon(Icons.ac_unit, color: Colors.white,),
       // children: List.generate(widget.postModelList.length, (index) => null)
       children: List.generate(innerList.children.length,
-          (index) => _buildItem(innerList.children[index])),
+          (index) => _buildItem(innerList.children[index].name!)),
       listKey: ObjectKey(innerList),
     );
   }
 
   _buildItem(String item) {
     return DragAndDropItem(
-      child: ListTile(
-        title: Text(
-          '${item}',
-          style: TextStyle(color: Colors.white),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+            border: Border.all(color: Colors.blueGrey,width: 1)
+        ),
+        // color: Colors.grey.withOpacity(0.2),
+        child: ListTile(
+          title: Text(
+            item,
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );

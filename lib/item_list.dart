@@ -2,36 +2,45 @@ import 'package:mse_yonsei/inner_list.dart';
 
 class ItemList {
 
-  List<InnerList> _list1 = [
+  List<InnerList> _list = [
     InnerList(
-      name: 'MY',
-      children: List.generate(6, (innerIndex) => 'myitem.1'),
+      name: 'Yonsei',
+      children: [],
     ),
     InnerList(
-      name: 'other',
-      children: List.generate(6, (innerIndex) => 'myitem.1'),
+      name: 'Yonsei MSE',
+      children: [],
     ),
     InnerList(
-      name: 'YONSEI MSE',
-      children: List.generate(6, (innerIndex) => 'myitem.2'),
+      name: 'Professor',
+      children: [],
     ),
     InnerList(
-      name: '공기업',
-      children: List.generate(6, (innerIndex) => 'myitem.3'),
+      name: 'Lab',
+      children: [],
     ),
     InnerList(
-      name: '사기업',
-      children: List.generate(6, (innerIndex) => 'myitem.4'),
+      name: 'Private_enterprise',
+      children: [],
     ),
     InnerList(
-      name: '랩실',
-      children: List.generate(6, (innerIndex) => 'myitem.4'),
+      name: 'Gov_fund Inst.',
+      children: [],
     ),
     InnerList(
-        name: 'sample',
-        children: ['asdf','asdf','asdf','asdf','asdf','asdf'],
+      name: 'Call',
+      children: [],
+    ),
+    InnerList(
+      name: 'Youtube',
+      children: [],
+    ),
+    InnerList(
+      name: 'Other',
+      children: [],
     ),
   ];
 
-  List<InnerList> get outsourceList => _list1;
+  List<InnerList> get outsourceList => _list;
+  set setList(List<InnerList> newList) => _list = newList;
 }

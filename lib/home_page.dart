@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
 import 'package:mse_yonsei/model/post_state.dart';
-import 'package:mse_yonsei/screens/exapnsion_tile_screen.dart';
+import 'package:mse_yonsei/screens/expansion_tile_screen.dart';
 import 'package:mse_yonsei/cosntants/screen_size.dart';
 import 'package:provider/provider.dart';
 
