@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
+import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/repo/post_network_repository.dart';
 import 'package:mse_yonsei/screens/add_address_screen.dart';
 import 'package:mse_yonsei/screens/detail_screen.dart';
@@ -18,6 +19,7 @@ import 'package:provider/provider.dart';
 
 class ExpansionTileExample extends StatefulWidget {
   final List<PostModel>? postModelList;
+
   // widget.postModelList 로 쓴다.
   ExpansionTileExample({Key? key, this.postModelList}) : super(key: key);
 
@@ -26,7 +28,7 @@ class ExpansionTileExample extends StatefulWidget {
 }
 
 class _ListTileExample extends State<ExpansionTileExample> {
-
+  List<PostModel> _myList = [];
   List<PostModel> _callList = [];
   List<PostModel> _privateEnterpriseList = [];
   List<PostModel> _otherList = [];
@@ -44,6 +46,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
     // Load the data from somewhere;
     return await _dataLoad();
   }
+
   List<InnerList> _outsourceList = ItemList().outsourceList;
 
   // late List<InnerList> _lists;
@@ -52,7 +55,6 @@ class _ListTileExample extends State<ExpansionTileExample> {
   void initState() {
     // My Page
     fetchData().then(_addData);
-
 
     // 처음에 기본 데이터를 넣어준다.
     super.initState();
@@ -68,7 +70,6 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamProvider<List<PostModel>>.value(
       initialData: [],
       value: postNetwokRepository.getAllPosts(),
@@ -76,14 +77,20 @@ class _ListTileExample extends State<ExpansionTileExample> {
         builder: (BuildContext context, List<PostModel> posts, Widget? child) {
           _callList = [];
           _privateEnterpriseList = [];
-          _otherList = [];4
+          _otherList = [];
+          print('@@@${posts.length}');
           for (int i = 0; i < posts.length; i++) {
-            if (posts[i].category == 'CALL') {
-              _callList.add(posts[i]);
-            } else if (posts[i].category == 'PRIVATE_ENTERPRISE') {
-              _privateEnterpriseList.add(posts[i]);
-            } else if (posts[i].category == 'OTHER') {
-              _otherList.add(posts[i]);
+            if (posts[i].userKey == Provider.of<UserModelState>(context, listen: false).userModel.userKey) {
+              // 내 userkey와 같은 것들만 받아와준다.
+                _myList.add(posts[i]);
+            } else if(posts[i].userKey == null || posts[i].userKey == '') {
+              if (posts[i].category == 'CALL') {
+                _callList.add(posts[i]);
+              } else if (posts[i].category == 'PRIVATE_ENTERPRISE') {
+                _privateEnterpriseList.add(posts[i]);
+              } else if (posts[i].category == 'OTHER') {
+                _otherList.add(posts[i]);
+              }
             }
           }
           return Scaffold(
@@ -93,8 +100,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
               actions: [
                 IconButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => SettingScreen()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SettingScreen()));
                     },
                     icon: Icon(Icons.settings)),
               ],
@@ -106,6 +113,10 @@ class _ListTileExample extends State<ExpansionTileExample> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    _expandedCategory(_myList),
+                    _expandedCategory(_callList),
+                    _expandedCategory(_privateEnterpriseList),
+                    _expandedCategory(_otherList),
                     /*
                     Opacity(
                       opacity: 0.4,
@@ -120,8 +131,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
                     */
                     Expanded(
                       child: DragAndDropLists(
-                        children: List.generate(
-                            _outsourceList.length, (index) => _buildList(index)),
+                        children: List.generate(_outsourceList.length,
+                            (index) => _buildList(index)),
                         onItemReorder: _onItemReorder,
                         onListReorder: _onListReorder,
                         // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
@@ -155,6 +166,20 @@ class _ListTileExample extends State<ExpansionTileExample> {
       ),
     );
   }
+// 곧 지울꺼야
+  Expanded _expandedCategory(List<PostModel> specific) {
+    return Expanded(
+        child: ListView.builder(
+          itemBuilder: (context, index) => ListTile(
+            title: Text(specific[index].name!,style: TextStyle(color: Colors.white),),
+          ),
+          itemCount: specific.length,
+        ));
+  }
+// 곧 지울꺼야
+
+
+
   Widget _getFloatingActionButton() {
     return SpeedDialMenuButton(
       //if needed to close the menu after clicking sub-FAB
@@ -167,7 +192,7 @@ class _ListTileExample extends State<ExpansionTileExample> {
       //general init
       isMainFABMini: false,
       mainMenuFloatingActionButton: MainMenuFloatingActionButton(
-        backgroundColor: Colors.white24,
+          backgroundColor: Colors.white24,
           mini: false,
           child: Icon(Icons.add),
           onPressed: () {},
@@ -181,7 +206,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
           onPressed: () {
             _isShowDial = false;
             setState(() {});
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>AddAddressScreen()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => AddAddressScreen()));
           },
           backgroundColor: Colors.pink,
         ),
@@ -191,7 +217,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
           onPressed: () {
             _isShowDial = !_isShowDial;
             setState(() {});
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>AddAddressScreen()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => AddAddressScreen()));
           },
           backgroundColor: Colors.orange,
         ),
@@ -199,7 +226,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
           mini: true,
           child: Icon(Icons.add_to_home_screen),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>AddAddressScreen()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => AddAddressScreen()));
           },
           backgroundColor: Colors.deepPurple,
         ),
