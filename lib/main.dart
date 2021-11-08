@@ -9,6 +9,7 @@ import 'package:mse_yonsei/model/post_state.dart';
 import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/repo/user_network_repository.dart';
 import 'package:mse_yonsei/screens/auth_screen.dart';
+import 'package:mse_yonsei/screens/practice_screen.dart';
 import 'package:mse_yonsei/widgets/my_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -44,22 +45,23 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: Consumer<FirebaseAuthState>(builder: (BuildContext context,
             FirebaseAuthState? firebaseAuthState, Widget? child) {
-          switch (firebaseAuthState!.firebaseAuthStatus) {
-            case FirebaseAuthStatus.signout:
-              _clearUserModel(context);
-              _currentWidget = AuthScreen();
-              break;
-            case FirebaseAuthStatus.signin:
-              _initUserModel(firebaseAuthState, context);
-              _currentWidget = MyHomePage();
-              break;
-            default:
-              _currentWidget = MyProgressIndicator(containerSize: 20);
-          }
-          return AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: _currentWidget,
-          );
+          return PracticeScreen();
+          // switch (firebaseAuthState!.firebaseAuthStatus) {
+          //   case FirebaseAuthStatus.signout:
+          //     _clearUserModel(context);
+          //     _currentWidget = AuthScreen();
+          //     break;
+          //   case FirebaseAuthStatus.signin:
+          //     _initUserModel(firebaseAuthState, context);
+          //     _currentWidget = MyHomePage();
+          //     break;
+          //   default:
+          //     _currentWidget = MyProgressIndicator(containerSize: 20);
+          // }
+          // return AnimatedSwitcher(
+          //   duration: Duration(milliseconds: 300),
+          //   child: _currentWidget,
+          // );
         }),
       ),
     );

@@ -36,6 +36,5 @@ class PostModel {
     return map;
   }
 
-  // Schedule({required this.name, required this.datetime, required this.universityList, required this.alarmSwitch, required this.category, required this.importance});
   PostModel({this.postKey, this.name, this.phone_number, this.url, this.lab_url, this.professor_url, this.category, this.reference});       // for make internal example...
 }

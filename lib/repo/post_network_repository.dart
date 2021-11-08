@@ -1,3 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mse_yonsei/cosntants/firestore_keys.dart';
+import 'package:mse_yonsei/model/firestore/post_model.dart';
+import 'package:mse_yonsei/repo/helper/transformers.dart';
+import 'package:rxdart/rxdart.dart';
+
+class PostNetwokRepository with Transformers {
+  Stream<List<PostModel>> getAllPosts() {
+    return FirebaseFirestore.instance.collection(COLLECTION_POSTS).snapshots().transform(toPosts);
+  }
+
+  Stream<void> getPostsFromSpecificUser(String category) {
+    return FirebaseFirestore.instance
+        .collection(COLLECTION_POSTS)
+        .where(KEY_CATEGORY, isEqualTo: category)
+        .snapshots()
+        .transform(toPosts);
+  }
+
+  // Stream<List<PostModel>> fetchPostsFromAllFollowers(List<dynamic> categories) {
+  //   final CollectionReference collectionReference = FirebaseFirestore.instance.collection(COLLECTION_POSTS);
+  //   List<Stream<List<PostModel>>> streams = [];
+  //
+  //   for(final category in categories) {
+  //     streams.add(collectionReference.where(KEY_CATEGORY, isEqualTo: category).snapshots().transform(toPosts));
+  //   }
+  //   // 이렇게 까지오면 List<Stream<List<PostModel>>>로 오는데 다시 List<PostModel>로 바꿔줘야한다(combinListOfPosts이용)
+  //   return CombineLatestStream.list<List<PostModel>>(streams).transform(combineListOfPosts).transform(latestToTop);
+  // }
+
+}
+PostNetwokRepository postNetwokRepository = PostNetwokRepository();
+
+
+
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:dongstagram/constant/firestore_keys.dart';
 // import 'package:dongstagram/models/firestore/post_model.dart';
