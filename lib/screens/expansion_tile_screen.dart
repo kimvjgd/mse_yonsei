@@ -29,15 +29,6 @@ class ExpansionTileExample extends StatefulWidget {
 
 class _ListTileExample extends State<ExpansionTileExample> {
   List<PostModel> _myList = [];
-  List<PostModel> _callList = [];
-  List<PostModel> _privateEnterpriseList = [];
-  List<PostModel> _otherList = [];
-  List<PostModel> _govFundInstList = [];
-  List<PostModel> _professorList = [];
-  List<PostModel> _labList = [];
-  List<PostModel> _yonseiList = [];
-  List<PostModel> _yonseiMSEList = [];
-  List<PostModel> _youtubeList = [];
 
   bool _isShowDial = false;
   final nodes = <TreeNode>[];
@@ -49,13 +40,11 @@ class _ListTileExample extends State<ExpansionTileExample> {
   }
 
   Future<List<TreeNode>> fetchData() async {
-    // Load the data from somewhere;
     return await _dataLoad();
   }
 
   List<InnerList> _outsourceList = ItemList().outsourceList;
 
-  // late List<InnerList> _lists;
 
   @override
   void initState() {
@@ -81,59 +70,18 @@ class _ListTileExample extends State<ExpansionTileExample> {
       value: postNetwokRepository.getAllPosts(),
       child: Consumer(
         builder: (BuildContext context, List<PostModel> posts, Widget? child) {
-          _myList = [];
-          _callList = [];
-          _privateEnterpriseList = [];
-          _otherList = [];
-          _govFundInstList = [];
-          _professorList = [];
-          _labList = [];
-          _yonseiList = [];
-          _yonseiMSEList = [];
-          _youtubeList = [];
-          _outsourceList[0].children = [];
-          _outsourceList[1].children = [];
-          _outsourceList[2].children = [];
-          _outsourceList[3].children = [];
-          _outsourceList[4].children = [];
-          _outsourceList[5].children = [];
-          _outsourceList[6].children = [];
-          _outsourceList[7].children = [];
-          _outsourceList[8].children = [];
 
+          _outsourceList = ItemList().outsourceList;
           for (int i = 0; i < posts.length; i++) {
             if (posts[i].userKey == Provider.of<UserModelState>(context, listen: false).userModel.userKey) {
               // 내 userkey와 같은 것들만 받아와준다.
                 _myList.add(posts[i]);
             } else if(posts[i].userKey == null || posts[i].userKey == '') {
-              if (posts[i].category == 'CALL') {
-                _callList.add(posts[i]);
-                _outsourceList[6].children.add(posts[i]);
-              } else if (posts[i].category == 'PRIVATE_ENTERPRISE') {
-                _privateEnterpriseList.add(posts[i]);
-                _outsourceList[4].children.add(posts[i]);
-              } else if (posts[i].category == 'OTHER') {
-                _otherList.add(posts[i]);
-                _outsourceList[8].children.add(posts[i]);
-              }else if (posts[i].category == 'GOV_FUND_INST') {
-                _govFundInstList.add(posts[i]);
-                _outsourceList[5].children.add(posts[i]);
-              }else if (posts[i].category == 'PROFESSOR') {
-                _professorList.add(posts[i]);
-                _outsourceList[2].children.add(posts[i]);
-              }else if (posts[i].category == 'LAB') {
-                _labList.add(posts[i]);
-                _outsourceList[3].children.add(posts[i]);
-              }else if (posts[i].category == 'YONSEI') {
-                _yonseiList.add(posts[i]);
-                _outsourceList[0].children.add(posts[i]);
-              }else if (posts[i].category == 'YONSEI_MSE') {
-                _yonseiMSEList.add(posts[i]);
-                _outsourceList[1].children.add(posts[i]);
-              }else if (posts[i].category == 'YOUTUBE') {
-                _youtubeList.add(posts[i]);
-                _outsourceList[7].children.add(posts[i]);
-              }
+                if(posts[i].category == 'YOUTUBE'){
+                  _outsourceList[6].children.add(posts[i]);
+                };
+
+              //
             }
           }
 
@@ -307,16 +255,25 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   _buildItem(String item) {
     return DragAndDropItem(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
-            border: Border.all(color: Colors.blueGrey,width: 1)
-        ),
-        // color: Colors.grey.withOpacity(0.2),
-        child: ListTile(
-          title: Text(
-            item,
-            style: TextStyle(color: Colors.white),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 4, top: 4, bottom: 4),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.2),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.blueGrey,width: 1)
+          ),
+          // color: Colors.grey.withOpacity(0.2),
+          child: InkWell(
+            child: ListTile(
+              title: Text(
+                item,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            onLongPress: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DetailPage(value: item,)));
+            },
           ),
         ),
       ),
