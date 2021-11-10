@@ -18,7 +18,6 @@ import 'package:mse_yonsei/item_list.dart';
 import 'package:mse_yonsei/main_menu_floating_action_button.dart';
 import 'package:mse_yonsei/my_list.dart';
 import 'package:provider/provider.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExpansionBodyScreen extends StatefulWidget {
@@ -272,13 +271,13 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
     var innerList = _outsourceList[outerIndex];
     return DragAndDropListExpansion(
       // canDrag: outerIndex==0?false:true,     // 큰 list가 drag할 수 있는가?
-      canDrag: true,
+      canDrag: false,
       title: Text(
         '${innerList.name}',
         style: TextStyle(color: Colors.white),
       ),
       subtitle: Text(
-        outerIndex == 0 ? 'reorderable' : 'fixed',
+        'Not Empty',
         style: TextStyle(color: Colors.white70),
       ),
       // leading: Icon(Icons.ac_unit, color: Colors.white,),

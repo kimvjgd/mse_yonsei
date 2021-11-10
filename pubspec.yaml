@@ -28,6 +28,7 @@ dependencies:
   rxdart: ^0.27.2
   shrink_sidemenu: ^2.0.0+1-null-safety
   liquid_ui: ^1.0.0+9
+  flutter_staggered_animations: ^1.0.0
 
 
 dev_dependencies:
