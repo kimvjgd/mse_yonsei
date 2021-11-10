@@ -9,20 +9,16 @@ class MyList {
         TreeNode<String>(
           'YONSEI',
           subNodes: [
-            TreeNode<String>('faculty page'),
-            TreeNode<String>('Professor & Lab'),
           ],
         ),
         TreeNode<String>(
           'Entertainment',
           subNodes: [
-            TreeNode<String>('web-toon'),
-            TreeNode<String>('shopping'),
           ],
         ),
       ],
     ),
   ];
 
-  List<TreeNode> get myList => _myList;
+  List<TreeNode> get myTreeList => _myList;
 }

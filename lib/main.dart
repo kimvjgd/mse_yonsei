@@ -9,7 +9,7 @@ import 'package:mse_yonsei/model/post_state.dart';
 import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/repo/user_network_repository.dart';
 import 'package:mse_yonsei/screens/auth_screen.dart';
-import 'package:mse_yonsei/screens/practice_screen.dart';
+import 'package:mse_yonsei/examples_deleted_soon/practice_screen.dart';
 import 'package:mse_yonsei/widgets/my_progress_indicator.dart';
 import 'package:provider/provider.dart';
 

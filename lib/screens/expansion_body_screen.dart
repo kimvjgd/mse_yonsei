@@ -19,15 +19,17 @@ import 'package:mse_yonsei/main_menu_floating_action_button.dart';
 import 'package:mse_yonsei/my_list.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mse_yonsei/my_list.dart';
 
 class ExpansionBodyScreen extends StatefulWidget {
 
   final Function() onMenuChanged;
 
   final List<PostModel>? postModelList;
+  final List<TreeNode>? myList;
 
   // widget.postModelList 로 쓴다.
-  ExpansionBodyScreen({Key? key, this.postModelList, required this.onMenuChanged}) : super(key: key);
+  ExpansionBodyScreen({Key? key, this.postModelList, required this.onMenuChanged, this.myList}) : super(key: key);
 
   @override
   _ListTileExample createState() => _ListTileExample();
@@ -46,7 +48,6 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
   void _launchURL(String url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
-  List<PostModel> _myList = [];
 
   bool _isShowDial = false;
   final nodes = <TreeNode>[];
@@ -62,6 +63,7 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
   }
 
   List<InnerList> _outsourceList = ItemList().outsourceList;
+  List<TreeNode> _myList = MyList().myTreeList;
 
   @override
   void initState() {
@@ -94,13 +96,19 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
       child: Consumer(
         builder: (BuildContext context, List<PostModel> posts, Widget? child) {
           _outsourceList = ItemList().outsourceList;
+          _myList = MyList().myTreeList;
           for (int i = 0; i < posts.length; i++) {
             if (posts[i].userKey ==
                 Provider.of<UserModelState>(context, listen: false)
                     .userModel
                     .userKey) {
               // 내 userkey와 같은 것들만 받아와준다.
-              _myList.add(posts[i]);
+              if(posts[i].category=='0'){
+                // _myList.add(TreeNode('0000'));
+              } else {
+                // _myList.add(TreeNode('1111'));
+
+              }
             } else if (posts[i].userKey == null || posts[i].userKey == '') {
               if (posts[i].category == 'YOUTUBE') {
                 _outsourceList[6].children.add(posts[i]);
@@ -140,7 +148,7 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          /*
+
                         Opacity(
                           opacity: 0.4,
                           child: Container(
@@ -151,7 +159,7 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
                             ),
                           ),
                         ),
-                        */
+
                           Expanded(
                             child: DragAndDropLists(
                               children: List.generate(_outsourceList.length,
@@ -440,6 +448,6 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
 }
 
 Future<List<TreeNode>> _dataLoad() async {
-  return MyList().myList;
+  return MyList().myTreeList;
 }
 enum MenuStatus { opened, closed }
