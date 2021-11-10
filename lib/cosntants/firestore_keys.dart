@@ -20,4 +20,6 @@ const KEY_NAME = 'name';
 const KEY_PHONE_NUMBER = 'number';
 const KEY_URL = 'url';
 const KEY_LAB_URL = 'lab_url';
+const KEY_LAB_NAME = 'lab_name';
 const KEY_PROFESSOR_URL = 'professor_url';
+const KEY_PROFESSOR_NAME = 'professor_name';

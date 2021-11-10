@@ -8,7 +8,9 @@ class PostModel {
   final String? phone_number;
   final String? url;
   final String? lab_url;
+  final String? lab_name;
   final String? professor_url;
+  final String? professor_name;
   final String? category;
   final DocumentReference? reference;
 
@@ -19,7 +21,9 @@ class PostModel {
         phone_number = map![KEY_PHONE_NUMBER],
         url = map![KEY_URL],
         lab_url = map![KEY_LAB_URL],
+        lab_name = map![KEY_LAB_NAME],
         professor_url = map![KEY_PROFESSOR_URL],
+        professor_name = map![KEY_PROFESSOR_NAME],
         category = map![KEY_CATEGORY];
 
   PostModel.fromSnapshot(DocumentSnapshot snapshot)
@@ -34,10 +38,12 @@ class PostModel {
     map[KEY_PHONE_NUMBER] = phone_number;
     map[KEY_URL] = url;
     map[KEY_LAB_URL] = '';
+    map[KEY_LAB_NAME] = '';
     map[KEY_PROFESSOR_URL] = '';
+    map[KEY_PROFESSOR_NAME] = '';
     map[KEY_CATEGORY] = category;
     return map;
   }
 
-  PostModel({this.postKey, this.name, this.userKey,this.phone_number, this.url, this.lab_url, this.professor_url, this.category, this.reference});       // for make internal example...
+  PostModel({this.postKey, this.name, this.userKey,this.phone_number, this.url, this.lab_url, this.lab_name, this.professor_url, this.professor_name, this.category, this.reference});       // for make internal example...
 }

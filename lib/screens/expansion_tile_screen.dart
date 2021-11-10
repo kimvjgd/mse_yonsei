@@ -3,6 +3,7 @@ import 'package:expandable_tree_menu/expandable_tree_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mse_yonsei/cosntants/material_color.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
 import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/repo/post_network_repository.dart';
@@ -16,6 +17,7 @@ import 'package:mse_yonsei/item_list.dart';
 import 'package:mse_yonsei/main_menu_floating_action_button.dart';
 import 'package:mse_yonsei/my_list.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ExpansionTileExample extends StatefulWidget {
   final List<PostModel>? postModelList;
@@ -28,6 +30,9 @@ class ExpansionTileExample extends StatefulWidget {
 }
 
 class _ListTileExample extends State<ExpansionTileExample> {
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+
   List<PostModel> _myList = [];
 
   bool _isShowDial = false;
@@ -44,7 +49,6 @@ class _ListTileExample extends State<ExpansionTileExample> {
   }
 
   List<InnerList> _outsourceList = ItemList().outsourceList;
-
 
   @override
   void initState() {
@@ -70,21 +74,20 @@ class _ListTileExample extends State<ExpansionTileExample> {
       value: postNetwokRepository.getAllPosts(),
       child: Consumer(
         builder: (BuildContext context, List<PostModel> posts, Widget? child) {
-
           _outsourceList = ItemList().outsourceList;
           for (int i = 0; i < posts.length; i++) {
-            if (posts[i].userKey == Provider.of<UserModelState>(context, listen: false).userModel.userKey) {
+            if (posts[i].userKey ==
+                Provider.of<UserModelState>(context, listen: false)
+                    .userModel
+                    .userKey) {
               // 내 userkey와 같은 것들만 받아와준다.
-                _myList.add(posts[i]);
-            } else if(posts[i].userKey == null || posts[i].userKey == '') {
-                if(posts[i].category == 'YOUTUBE'){
-                  _outsourceList[6].children.add(posts[i]);
-                };
-
-              //
+              _myList.add(posts[i]);
+            } else if (posts[i].userKey == null || posts[i].userKey == '') {
+              if (posts[i].category == 'YOUTUBE') {
+                _outsourceList[6].children.add(posts[i]);
+              }
             }
           }
-
 
           return Scaffold(
             backgroundColor: Colors.blueGrey,
@@ -155,8 +158,6 @@ class _ListTileExample extends State<ExpansionTileExample> {
       ),
     );
   }
-
-
 
   Widget _getFloatingActionButton() {
     return SpeedDialMenuButton(
@@ -248,32 +249,29 @@ class _ListTileExample extends State<ExpansionTileExample> {
       // leading: Icon(Icons.ac_unit, color: Colors.white,),
       // children: List.generate(widget.postModelList.length, (index) => null)
       children: List.generate(innerList.children.length,
-          (index) => _buildItem(innerList.children[index].name!)),
+          (index) => _buildItem(innerList.children[index])),
       listKey: ObjectKey(innerList),
     );
   }
 
-  _buildItem(String item) {
+  _buildItem(PostModel item) {
     return DragAndDropItem(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 4, top: 4, bottom: 4),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey.withOpacity(0.2),
               borderRadius: BorderRadius.all(Radius.circular(10)),
-              border: Border.all(color: Colors.blueGrey,width: 1)
-          ),
+              border: Border.all(color: Colors.blueGrey, width: 1)),
           // color: Colors.grey.withOpacity(0.2),
           child: InkWell(
             child: ListTile(
               title: Text(
-                item,
+                item.name!,
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            onLongPress: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DetailPage(value: item,)));
-            },
+            onLongPress: () => showSimpleDialog(context, item),
           ),
         ),
       ),
@@ -295,6 +293,120 @@ class _ListTileExample extends State<ExpansionTileExample> {
       _outsourceList.insert(newListIndex, movedList);
     });
   }
+
+  void showSimpleDialog(BuildContext context, PostModel item) => showDialog(
+        context: context,
+        builder: (_) => SimpleDialog(
+          backgroundColor: app_color,
+          title: Container(
+              child: Text(
+            item.name!,
+            style: TextStyle(fontSize: 24, color: Colors.white70),
+          )),
+          children: [
+            Container(
+              height: 3,
+              color: Colors.amber,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            if (item.phone_number != null && item.phone_number != '')
+              InkWell(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.call,
+                    color: Colors.white70,
+                  ),
+                  title: Text(
+                    'Call',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            if (item.url != null && item.url != '')
+              InkWell(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.subdirectory_arrow_right_sharp,
+                    color: Colors.white70,
+                  ),
+                  title: Text(
+                    'Url',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ),
+                onTap: () {
+                  _launchURL(item.url!);
+                  Navigator.pop(context);
+                },
+              ),
+            if (item.category == 'PROFESSOR')
+              Column(
+                children: [
+                  InkWell(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.account_balance,
+                        color: Colors.white70,
+                      ),
+                      title: Text(
+                        'Lab_url',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ),
+                    onTap: () {
+                      if (item.lab_url == null || item.lab_url == '') {
+                        SnackBar snackBar = SnackBar(
+                          backgroundColor: app_color,
+                          content: Text(
+                            '해당 연구실 url이 존재하지 않습니다.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        _launchURL(item.lab_url!);
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                  InkWell(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.account_box_outlined,
+                        color: Colors.white70,
+                      ),
+                      title: Text(
+                        'Prof._url',
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ),
+                    onTap: () {
+                      if (item.professor_url == null ||
+                          item.professor_url == '') {
+                        SnackBar snackBar = SnackBar(
+                          backgroundColor: app_color,
+                          content: Text(
+                            '해당 교수님 url이 존재하지 않습니다.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        _launchURL(item.professor_url!);
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                ],
+              ),
+          ],
+        ),
+      );
 }
 
 Future<List<TreeNode>> _dataLoad() async {
