@@ -276,10 +276,6 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
         '${innerList.name}',
         style: TextStyle(color: Colors.white),
       ),
-      subtitle: Text(
-        'Not Empty',
-        style: TextStyle(color: Colors.white70),
-      ),
       // leading: Icon(Icons.ac_unit, color: Colors.white,),
       // children: List.generate(widget.postModelList.length, (index) => null)
       children: List.generate(innerList.children.length,
