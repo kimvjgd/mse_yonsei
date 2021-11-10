@@ -15,7 +15,7 @@ class Background extends StatelessWidget {
       right: 0,
       left: 0,
       child: FittedBox(
-          fit: BoxFit.fitHeight,
+          fit: BoxFit.fill,
           child: Image.asset('assets/images/${file_name}.png')),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mse_yonsei/cosntants/material_color.dart';
+import 'package:mse_yonsei/cosntants/screen_size.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
 import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/repo/post_network_repository.dart';
@@ -20,18 +21,28 @@ import 'package:provider/provider.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ExpansionTileExample extends StatefulWidget {
+class ExpansionBodyScreen extends StatefulWidget {
+
+  final Function() onMenuChanged;
+
   final List<PostModel>? postModelList;
 
   // widget.postModelList 로 쓴다.
-  ExpansionTileExample({Key? key, this.postModelList}) : super(key: key);
+  ExpansionBodyScreen({Key? key, this.postModelList, required this.onMenuChanged}) : super(key: key);
 
   @override
   _ListTileExample createState() => _ListTileExample();
 }
 
-class _ListTileExample extends State<ExpansionTileExample> {
+class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProviderStateMixin {
 
+  late AnimationController _iconAnimationController;
+
+
+  final menuWidth = size!.width / 3*2;
+
+  double bodyXPos = 0;
+  double menuXPos = size!.width;
 
   void _launchURL(String url) async =>
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
@@ -55,7 +66,8 @@ class _ListTileExample extends State<ExpansionTileExample> {
 
   @override
   void initState() {
-    // My Page
+    _iconAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     fetchData().then(_addData);
 
     // 처음에 기본 데이터를 넣어준다.
@@ -68,6 +80,11 @@ class _ListTileExample extends State<ExpansionTileExample> {
     //         6, (innerIndex) => '${outerIndex + 1}.$innerIndex'), //작은거
     //   );
     // });
+  }
+  @override
+  void dispose() {
+    _iconAnimationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,62 +115,77 @@ class _ListTileExample extends State<ExpansionTileExample> {
               title: Text('Mse Yonsei'),
               actions: [
                 IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SettingScreen()));
-                    },
-                    icon: Icon(Icons.settings)),
+                  icon: AnimatedIcon(
+                    icon: AnimatedIcons.menu_close,
+                    progress: _iconAnimationController,
+                  ),
+                  onPressed: () {
+                    widget.onMenuChanged();
+                    _iconAnimationController.status == AnimationStatus.completed
+                        ? _iconAnimationController.reverse()
+                        : _iconAnimationController.forward();
+                  },
+                )
               ],
             ),
             body: Stack(
-              fit: StackFit.expand,
-              children: [
-                Background(file_name: 'homebackground'),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    /*
-                    Opacity(
-                      opacity: 0.4,
-                      child: Container(
-                        child: ExpandableTree(
-                          nodes: nodes,
-                          nodeBuilder: _nodeBuilder,
-                          onSelect: (node) => _nodeSelected(context, node),
-                        ),
-                      ),
-                    ),
-                    */
-                    Expanded(
-                      child: DragAndDropLists(
-                        children: List.generate(_outsourceList.length,
-                            (index) => _buildList(index)),
-                        onItemReorder: _onItemReorder,
-                        onListReorder: _onListReorder,
-                        // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
-
-                        listGhost: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30.0),
-                          child: Center(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 30.0, horizontal: 100.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(7.0),
-                              ),
-                              child: Icon(
-                                Icons.add_box,
-                                color: Colors.pink,
-                              ),
+              children:[
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  transform: Matrix4.translationValues(bodyXPos, 0, 0),
+                  curve: Curves.fastOutSlowIn,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Background(file_name: 'homebackground',),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          /*
+                        Opacity(
+                          opacity: 0.4,
+                          child: Container(
+                            child: ExpandableTree(
+                              nodes: nodes,
+                              nodeBuilder: _nodeBuilder,
+                              onSelect: (node) => _nodeSelected(context, node),
                             ),
                           ),
                         ),
+                        */
+                          Expanded(
+                            child: DragAndDropLists(
+                              children: List.generate(_outsourceList.length,
+                                      (index) => _buildList(index)),
+                              onItemReorder: _onItemReorder,
+                              onListReorder: _onListReorder,
+                              // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
+
+                              listGhost: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 30.0),
+                                child: Center(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 30.0, horizontal: 100.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(7.0),
+                                    ),
+                                    child: Icon(
+                                      Icons.add_box,
+                                      color: Colors.pink,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ],
+              ]
             ),
             floatingActionButton: _getFloatingActionButton(),
           );
@@ -415,3 +447,4 @@ class _ListTileExample extends State<ExpansionTileExample> {
 Future<List<TreeNode>> _dataLoad() async {
   return MyList().myList;
 }
+enum MenuStatus { opened, closed }

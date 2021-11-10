@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
 import 'package:mse_yonsei/model/post_state.dart';
-import 'package:mse_yonsei/screens/expansion_tile_screen.dart';
+import 'package:mse_yonsei/screens/expansion_screen.dart';
+import 'package:mse_yonsei/screens/expansion_body_screen.dart';
 import 'package:mse_yonsei/cosntants/screen_size.dart';
 import 'package:provider/provider.dart';
 
@@ -26,12 +27,9 @@ class _MyHomePageState extends State<MyHomePage> {
         .size;
     return Consumer<PostState>(
       builder: (BuildContext context, PostState? postState, Widget? child) {
-
-        postState!.getPostData();
-        List<PostModel>? _postModelList = postState.postModelList;
-
         return Scaffold(
-          body: ExpansionTileExample(postModelList: _postModelList), // This trailing comma makes auto-formatting nicer for build methods.
+          body: ExpansionScreen(),
+          // body: ExpansionBodyScreen(postModelList: _postModelList),
         );
       },
     );
