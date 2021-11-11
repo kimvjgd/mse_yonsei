@@ -3,44 +3,41 @@ import 'package:expandable_tree_menu/expandable_tree_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:mse_yonsei/cosntants/material_color.dart';
 import 'package:mse_yonsei/cosntants/screen_size.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
 import 'package:mse_yonsei/model/user_model_state.dart';
+import 'package:mse_yonsei/repo/helper/generate_post_key.dart';
 import 'package:mse_yonsei/repo/post_network_repository.dart';
-import 'package:mse_yonsei/screens/add_address_screen.dart';
-import 'package:mse_yonsei/screens/detail_screen.dart';
-import 'package:mse_yonsei/screens/setting_screen.dart';
 import 'package:mse_yonsei/widgets/background.dart';
-import 'package:mse_yonsei/flutter_speed_dial_menu_button.dart';
 import 'package:mse_yonsei/inner_list.dart';
 import 'package:mse_yonsei/item_list.dart';
-import 'package:mse_yonsei/main_menu_floating_action_button.dart';
 import 'package:mse_yonsei/my_list.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mse_yonsei/my_list.dart';
 
 class ExpansionBodyScreen extends StatefulWidget {
 
   final Function() onMenuChanged;
 
-  final List<PostModel>? postModelList;
-  final List<TreeNode>? myList;
 
   // widget.postModelList 로 쓴다.
-  ExpansionBodyScreen({Key? key, this.postModelList, required this.onMenuChanged, this.myList}) : super(key: key);
+  ExpansionBodyScreen({Key? key, required this.onMenuChanged}) : super(key: key);
 
   @override
   _ListTileExample createState() => _ListTileExample();
 }
 
 class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProviderStateMixin {
+  String userKey = '';
 
   late AnimationController _iconAnimationController;
 
 
   final menuWidth = size!.width / 3*2;
+
+  String new_trigger='n';
 
   double bodyXPos = 0;
   double menuXPos = size!.width;
@@ -49,38 +46,17 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
 
-  bool _isShowDial = false;
-  final nodes = <TreeNode>[];
 
-  void _addData(data) {
-    setState(() {
-      nodes.addAll(data);
-    });
-  }
-
-  Future<List<TreeNode>> fetchData() async {
-    return await _dataLoad();
-  }
 
   List<InnerList> _outsourceList = ItemList().outsourceList;
-  List<TreeNode> _myList = MyList().myTreeList;
 
   @override
   void initState() {
     _iconAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    fetchData().then(_addData);
 
-    // 처음에 기본 데이터를 넣어준다.
     super.initState();
-    // _lists = List.generate(10, (outerIndex) {
-    //   return InnerList(
-    //     // 큰거
-    //     name: (outerIndex + 1).toString(),
-    //     children: List.generate(
-    //         6, (innerIndex) => '${outerIndex + 1}.$innerIndex'), //작은거
-    //   );
-    // });
+
   }
   @override
   void dispose() {
@@ -90,30 +66,24 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
+
+    userKey = Provider.of<UserModelState>(context, listen: false).userModel.userKey;
+
+
     return StreamProvider<List<PostModel>>.value(
       initialData: [],
-      value: postNetwokRepository.getAllPosts(),
+      value: postNetworkRepository.getAllYoutube(),
       child: Consumer(
         builder: (BuildContext context, List<PostModel> posts, Widget? child) {
           _outsourceList = ItemList().outsourceList;
-          _myList = MyList().myTreeList;
+          new_trigger = 'n';
           for (int i = 0; i < posts.length; i++) {
-            if (posts[i].userKey ==
-                Provider.of<UserModelState>(context, listen: false)
-                    .userModel
-                    .userKey) {
-              // 내 userkey와 같은 것들만 받아와준다.
-              if(posts[i].category=='0'){
-                // _myList.add(TreeNode('0000'));
-              } else {
-                // _myList.add(TreeNode('1111'));
-
-              }
-            } else if (posts[i].userKey == null || posts[i].userKey == '') {
+            if (posts[i].new_trigger=='y'){
+              new_trigger = 'y';
+            }
               if (posts[i].category == 'YOUTUBE') {
                 _outsourceList[6].children.add(posts[i]);
               }
-            }
           }
 
           return Scaffold(
@@ -148,18 +118,6 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-
-                        Opacity(
-                          opacity: 0.4,
-                          child: Container(
-                            child: ExpandableTree(
-                              nodes: nodes,
-                              nodeBuilder: _nodeBuilder,
-                              onSelect: (node) => _nodeSelected(context, node),
-                            ),
-                          ),
-                        ),
-
                           Expanded(
                             child: DragAndDropLists(
                               children: List.generate(_outsourceList.length,
@@ -194,95 +152,27 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
                 ),
               ]
             ),
-            floatingActionButton: _getFloatingActionButton(),
           );
         },
       ),
     );
   }
 
-  Widget _getFloatingActionButton() {
-    return SpeedDialMenuButton(
-      //if needed to close the menu after clicking sub-FAB
-      isShowSpeedDial: _isShowDial,
-      //manually open or close menu
-      updateSpeedDialStatus: (isShow) {
-        //return any open or close change within the widget
-        this._isShowDial = isShow;
-      },
-      //general init
-      isMainFABMini: false,
-      mainMenuFloatingActionButton: MainMenuFloatingActionButton(
-          backgroundColor: Colors.white24,
-          mini: false,
-          child: Icon(Icons.add),
-          onPressed: () {},
-          closeMenuChild: Icon(Icons.close),
-          closeMenuForegroundColor: Colors.white,
-          closeMenuBackgroundColor: Colors.red),
-      floatingActionButtonWidgetChildren: <FloatingActionButton>[
-        FloatingActionButton(
-          mini: true,
-          child: Icon(Icons.menu),
-          onPressed: () {
-            _isShowDial = false;
-            setState(() {});
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => AddAddressScreen()));
-          },
-          backgroundColor: Colors.pink,
-        ),
-        FloatingActionButton(
-          mini: true,
-          child: Icon(Icons.wifi_protected_setup),
-          onPressed: () {
-            _isShowDial = !_isShowDial;
-            setState(() {});
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => AddAddressScreen()));
-          },
-          backgroundColor: Colors.orange,
-        ),
-        FloatingActionButton(
-          mini: true,
-          child: Icon(Icons.add_to_home_screen),
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => AddAddressScreen()));
-          },
-          backgroundColor: Colors.deepPurple,
-        ),
-      ],
-      isSpeedDialFABsMini: true,
-      paddingBtwSpeedDialButton: 30.0,
-    );
-  }
 
-  /// Handle the onTap event on a Node Widget
-  void _nodeSelected(context, nodeValue) {
-    final route =
-        MaterialPageRoute(builder: (context) => DetailPage(value: nodeValue));
-    Navigator.of(context).push(route);
-  }
-
-  /// Build the Node widget at a specific node in the tree
-  Widget _nodeBuilder(context, nodeValue) {
-    return Card(
-        margin: EdgeInsets.symmetric(vertical: 1),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(nodeValue.toString()),
-        ));
-  }
 
   _buildList(int outerIndex) {
     var innerList = _outsourceList[outerIndex];
     return DragAndDropListExpansion(
       // canDrag: outerIndex==0?false:true,     // 큰 list가 drag할 수 있는가?
       canDrag: false,
-      title: Text(
-        '${innerList.name}',
-        style: TextStyle(color: Colors.white),
+      title: Row(
+        children: [
+          (outerIndex == 6 && new_trigger == 'y')?Text('New ',style: TextStyle(color: Colors.red),):Text(''),
+          Text(
+            '${innerList.name}',
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
       ),
       // leading: Icon(Icons.ac_unit, color: Colors.white,),
       // children: List.generate(widget.postModelList.length, (index) => null)
@@ -361,7 +251,8 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
                     style: TextStyle(color: Colors.white70),
                   ),
                 ),
-                onTap: () {
+                onTap: () async {
+                  await FlutterPhoneDirectCaller.callNumber(item.phone_number!);
                   Navigator.pop(context);
                 },
               ),
@@ -442,12 +333,30 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
                   ),
                 ],
               ),
+            Row(
+              children: [
+                Spacer(),
+                InkWell(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(child: Icon(Icons.add_box, color: Colors.redAccent,)),
+                ),
+                onTap: () async {
+                  final String postKey = getNewPostKey(Provider.of<UserModelState>(context, listen: false).userModel);
+
+                  await PostNetwokRepository().sendData(userKey, postKey, item.name!, item.phone_number, item.url, item.lab_url, item.professor_url, item.category);
+                  Navigator.pop(context);
+                },
+                ),
+                SizedBox(width: 20,),
+              ],
+            ),
           ],
         ),
       );
 }
 
 Future<List<TreeNode>> _dataLoad() async {
-  return MyList().myTreeList;
+  return MyList().myList;
 }
 enum MenuStatus { opened, closed }
