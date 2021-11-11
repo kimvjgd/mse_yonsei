@@ -26,9 +26,6 @@ dependencies:
   flutter_arc_speed_dial: ^2.0.0
   intro_slider: ^3.0.2
   rxdart: ^0.27.2
-  shrink_sidemenu: ^2.0.0+1-null-safety
-  liquid_ui: ^1.0.0+9
-  flutter_staggered_animations: ^1.0.0
 
 
 dev_dependencies:
@@ -47,5 +44,5 @@ flutter:
         - asset: assets/fonts/Stylish-Regular.ttf
     - family: DonghyunEn
       fonts:
-        - asset: assets/fonts/Satisfy-Regular.ttf
+        - asset: assets/fonts/Italianno-Regular.ttf
 

@@ -81,9 +81,9 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
             if (posts[i].new_trigger=='y'){
               new_trigger = 'y';
             }
-              if (posts[i].category == 'YOUTUBE') {
-                _outsourceList[6].children.add(posts[i]);
-              }
+            if (posts[i].category == 'YOUTUBE') {
+              _outsourceList[6].children.add(posts[i]);
+            }
           }
 
           return Scaffold(
@@ -106,51 +106,51 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
               ],
             ),
             body: Stack(
-              children:[
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  transform: Matrix4.translationValues(bodyXPos, 0, 0),
-                  curve: Curves.fastOutSlowIn,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Background(file_name: 'homebackground',),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: DragAndDropLists(
-                              children: List.generate(_outsourceList.length,
-                                      (index) => _buildList(index)),
-                              onItemReorder: _onItemReorder,
-                              onListReorder: _onListReorder,
-                              // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
+                children:[
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    transform: Matrix4.translationValues(bodyXPos, 0, 0),
+                    curve: Curves.fastOutSlowIn,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Background(file_name: 'homebackground',),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: DragAndDropLists(
+                                children: List.generate(_outsourceList.length,
+                                        (index) => _buildList(index)),
+                                onItemReorder: _onItemReorder,
+                                onListReorder: _onListReorder,
+                                // listGhost is mandatory when using expansion tiles to prevent multiple widgets using the same globalkey
 
-                              listGhost: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                                child: Center(
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 30.0, horizontal: 100.0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(),
-                                      borderRadius: BorderRadius.circular(7.0),
-                                    ),
-                                    child: Icon(
-                                      Icons.add_box,
-                                      color: Colors.pink,
+                                listGhost: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 30.0),
+                                  child: Center(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 30.0, horizontal: 100.0),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(),
+                                        borderRadius: BorderRadius.circular(7.0),
+                                      ),
+                                      child: Icon(
+                                        Icons.add_box,
+                                        color: Colors.pink,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ]
+                ]
             ),
           );
         },
@@ -177,7 +177,7 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
       // leading: Icon(Icons.ac_unit, color: Colors.white,),
       // children: List.generate(widget.postModelList.length, (index) => null)
       children: List.generate(innerList.children.length,
-          (index) => _buildItem(innerList.children[index])),
+              (index) => _buildItem(innerList.children[index])),
       listKey: ObjectKey(innerList),
     );
   }
@@ -210,7 +210,7 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
       int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
     setState(() {
       var movedItem =
-          _outsourceList[oldListIndex].children.removeAt(oldItemIndex);
+      _outsourceList[oldListIndex].children.removeAt(oldItemIndex);
       _outsourceList[newListIndex].children.insert(newItemIndex, movedItem);
     });
   }
@@ -223,137 +223,137 @@ class _ListTileExample extends State<ExpansionBodyScreen> with SingleTickerProvi
   }
 
   void showSimpleDialog(BuildContext context, PostModel item) => showDialog(
-        context: context,
-        builder: (_) => SimpleDialog(
-          backgroundColor: app_color,
-          title: Container(
-              child: Text(
+    context: context,
+    builder: (_) => SimpleDialog(
+      backgroundColor: app_color,
+      title: Container(
+          child: Text(
             item.name!,
             style: TextStyle(fontSize: 24, color: Colors.white70),
           )),
-          children: [
-            Container(
-              height: 3,
-              color: Colors.amber,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            if (item.phone_number != null && item.phone_number != '')
-              InkWell(
-                child: ListTile(
-                  leading: Icon(
-                    Icons.call,
-                    color: Colors.white70,
-                  ),
-                  title: Text(
-                    'Call',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ),
-                onTap: () async {
-                  await FlutterPhoneDirectCaller.callNumber(item.phone_number!);
-                  Navigator.pop(context);
-                },
+      children: [
+        Container(
+          height: 3,
+          color: Colors.amber,
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        if (item.phone_number != null && item.phone_number != '')
+          InkWell(
+            child: ListTile(
+              leading: Icon(
+                Icons.call,
+                color: Colors.white70,
               ),
-            if (item.url != null && item.url != '')
+              title: Text(
+                'Call',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+            onTap: () async {
+              await FlutterPhoneDirectCaller.callNumber(item.phone_number!);
+              Navigator.pop(context);
+            },
+          ),
+        if (item.url != null && item.url != '')
+          InkWell(
+            child: ListTile(
+              leading: Icon(
+                Icons.subdirectory_arrow_right_sharp,
+                color: Colors.white70,
+              ),
+              title: Text(
+                'Url',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+            onTap: () {
+              _launchURL(item.url!);
+              Navigator.pop(context);
+            },
+          ),
+        if (item.category == 'PROFESSOR')
+          Column(
+            children: [
               InkWell(
                 child: ListTile(
                   leading: Icon(
-                    Icons.subdirectory_arrow_right_sharp,
+                    Icons.account_balance,
                     color: Colors.white70,
                   ),
                   title: Text(
-                    'Url',
+                    'Lab_url',
                     style: TextStyle(color: Colors.white70),
                   ),
                 ),
                 onTap: () {
-                  _launchURL(item.url!);
-                  Navigator.pop(context);
+                  if (item.lab_url == null || item.lab_url == '') {
+                    SnackBar snackBar = SnackBar(
+                      backgroundColor: app_color,
+                      content: Text(
+                        '해당 연구실 url이 존재하지 않습니다.',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    _launchURL(item.lab_url!);
+                    Navigator.pop(context);
+                  }
                 },
               ),
-            if (item.category == 'PROFESSOR')
-              Column(
-                children: [
-                  InkWell(
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.account_balance,
-                        color: Colors.white70,
-                      ),
-                      title: Text(
-                        'Lab_url',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    ),
-                    onTap: () {
-                      if (item.lab_url == null || item.lab_url == '') {
-                        SnackBar snackBar = SnackBar(
-                          backgroundColor: app_color,
-                          content: Text(
-                            '해당 연구실 url이 존재하지 않습니다.',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else {
-                        _launchURL(item.lab_url!);
-                        Navigator.pop(context);
-                      }
-                    },
+              InkWell(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.account_box_outlined,
+                    color: Colors.white70,
                   ),
-                  InkWell(
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.account_box_outlined,
-                        color: Colors.white70,
-                      ),
-                      title: Text(
-                        'Prof._url',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    ),
-                    onTap: () {
-                      if (item.professor_url == null ||
-                          item.professor_url == '') {
-                        SnackBar snackBar = SnackBar(
-                          backgroundColor: app_color,
-                          content: Text(
-                            '해당 교수님 url이 존재하지 않습니다.',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else {
-                        _launchURL(item.professor_url!);
-                        Navigator.pop(context);
-                      }
-                    },
+                  title: Text(
+                    'Prof._url',
+                    style: TextStyle(color: Colors.white70),
                   ),
-                ],
-              ),
-            Row(
-              children: [
-                Spacer(),
-                InkWell(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(child: Icon(Icons.add_box, color: Colors.redAccent,)),
                 ),
-                onTap: () async {
-                  final String postKey = getNewPostKey(Provider.of<UserModelState>(context, listen: false).userModel);
+                onTap: () {
+                  if (item.professor_url == null ||
+                      item.professor_url == '') {
+                    SnackBar snackBar = SnackBar(
+                      backgroundColor: app_color,
+                      content: Text(
+                        '해당 교수님 url이 존재하지 않습니다.',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    _launchURL(item.professor_url!);
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            ],
+          ),
+        Row(
+          children: [
+            Spacer(),
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(child: Icon(Icons.add_box, color: Colors.redAccent,)),
+              ),
+              onTap: () async {
+                final String postKey = getNewPostKey(Provider.of<UserModelState>(context, listen: false).userModel);
 
-                  await PostNetwokRepository().sendData(userKey, postKey, item.name!, item.phone_number, item.url, item.lab_url, item.professor_url, item.category);
-                  Navigator.pop(context);
-                },
-                ),
-                SizedBox(width: 20,),
-              ],
+                await PostNetwokRepository().sendData(userKey, postKey, item.name!, item.phone_number, item.url, item.lab_url, item.professor_url, item.category);
+                Navigator.pop(context);
+              },
             ),
+            SizedBox(width: 20,),
           ],
         ),
-      );
+      ],
+    ),
+  );
 }
 
 Future<List<TreeNode>> _dataLoad() async {

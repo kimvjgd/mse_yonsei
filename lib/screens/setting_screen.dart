@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mse_yonsei/model/app_state.dart';
 import 'package:mse_yonsei/model/firebase_auth_state.dart';
 import 'package:mse_yonsei/screens/auth_screen.dart';
 import 'package:mse_yonsei/screens/introduce_screen.dart';
@@ -30,52 +29,47 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        // backgroundColor: Provider.of<AppState>(context).app_color,
-        title: Text(
-          'Settings',
-          style: TextStyle(fontFamily: 'DonghyunKo'),
+        appBar: AppBar(
+          // backgroundColor: Provider.of<AppState>(context).app_color,
+          title: Text(
+            'Settings',
+            style: TextStyle(fontFamily: 'DonghyunKo'),
+          ),
         ),
-      ),
-      body: Consumer<AppState>(
-        builder: (BuildContext context, AppState? appState, Widget? child) {
-          return Stack(
-            children: [
-              Background(file_name: 'homebackground'),
-              Opacity(
-                opacity: 0.3,
-                child: ListView(
-                  children: [
-                    // Container(height: 3, color: univState.currentColor),
-                    // _heightBox(1),
-                    _settingList('어플 세팅'),
-                    _appColordropButton(appState!),
-                    _dividerDropButton(appState),
-                    _heightBox(3),
-                    // _dropButton(univState),
-                    // _divider,
-                    _heightBox(30),
-                    _settingList('개인 설정'),
-                    // _checkableSettingList('학교', univState.currentColor),
-                    // _divider,
-                    // _gotoAnotherPage('Schedule 추가 및 오류개선 방법', univState.currentColor,
-                    //     FeedbackScreen()),
-                    // _divider,
-                    _logoutPage('log out'),
-                    // _divider,
-                    _heightBox(30),
-                    _settingList('우리 앱?'),
-                    _gotoAnotherPage('앱 소개', IntroScreen()),
-                    // _divider,
-                    // _textBox('Version 1.0'),
-                    // _divider,
-                  ],
-                ),
+        body: Stack(
+          children: [
+            Background(file_name: 'homebackground'),
+            Opacity(
+              opacity: 0.3,
+              child: ListView(
+                children: [
+                  // Container(height: 3, color: univState.currentColor),
+                  // _heightBox(1),
+                  _settingList('어플 세팅'),
+                  // _appColordropButton(appState!),
+                  // _dividerDropButton(appState),
+                  _heightBox(3),
+                  // _dropButton(univState),
+                  // _divider,
+                  _settingList('개인 설정'),
+                  // _checkableSettingList('학교', univState.currentColor),
+                  // _divider,
+                  // _gotoAnotherPage('Schedule 추가 및 오류개선 방법', univState.currentColor,
+                  //     FeedbackScreen()),
+                  // _divider,
+                  _logoutPage('log out'),
+                  // _divider,
+                  // _heightBox(30),
+                  _settingList('우리 앱?'),
+                  _gotoAnotherPage('앱 소개', IntroScreen()),
+                  // _divider,
+                  // _textBox('Version 1.0'),
+                  // _divider,
+                ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        )
     );
   }
 
@@ -104,10 +98,10 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Divider get _divider => Divider(
-        thickness: 1,
-        height: 0,
-        color: Color(0xff003976),
-      );
+    thickness: 1,
+    height: 0,
+    color: Color(0xff003976),
+  );
 
   Container _checkableSettingList(String title, Color color) {
     return Container(
@@ -176,7 +170,7 @@ class _SettingScreenState extends State<SettingScreen> {
       child: ListTile(
         onTap: () async{
           await Provider.of<FirebaseAuthState>(context, listen: false).signOut();
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>AuthScreen()));
+          // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>AuthScreen()));
         },
         title: Text(
           title,
@@ -206,81 +200,81 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Container _appColordropButton(AppState appState) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: DropdownButton(
-          isExpanded: true,
-          value: _selectedAppColorValue,
-          // value: appState.app_color_list[_currentIndex],
-          items: appState.app_color_text_list.map((value) {
-            return DropdownMenuItem(
-              onTap: () {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    value,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              value: value,
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              _currentIndex = appState.app_color_text_list.indexOf(value.toString());
-              _selectedAppColorValue = appState.app_color_text_list[_currentIndex];
-              appState.setAppColor(_currentIndex);
+// Container _appColordropButton(AppState appState) {
+//   return Container(
+//     color: Colors.white,
+//     child: Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 10),
+//       child: DropdownButton(
+//         isExpanded: true,
+//         value: _selectedAppColorValue,
+//         // value: appState.app_color_list[_currentIndex],
+//         items: appState.app_color_text_list.map((value) {
+//           return DropdownMenuItem(
+//             onTap: () {},
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text(
+//                   value,
+//                   style: TextStyle(
+//                     color: Colors.black,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             value: value,
+//           );
+//         }).toList(),
+//         onChanged: (value) {
+//           setState(() {
+//             _currentIndex = appState.app_color_text_list.indexOf(value.toString());
+//             _selectedAppColorValue = appState.app_color_text_list[_currentIndex];
+//             appState.setAppColor(_currentIndex);
+//
+//
+//           });
+//         },
+//       ),
+//     ),
+//   );
+// }
 
-
-            });
-          },
-        ),
-      ),
-    );
-  }
-
-  Container _dividerDropButton(AppState appState) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: DropdownButton(
-          isExpanded: true,
-          value: _selectedDividerColorValue,
-          // value: appState.app_color_list[_currentIndex],
-          items: appState.divider_color_text_list.map((value) {
-            return DropdownMenuItem(
-              onTap: () {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    value,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              value: value,
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              _currentIndex = appState.divider_color_text_list.indexOf(value.toString());
-              _selectedDividerColorValue = appState.app_color_text_list[_currentIndex];
-              appState.setDividerColor(_currentIndex);
-            });
-          },
-        ),
-      ),
-    );
-  }
+// Container _dividerDropButton(AppState appState) {
+//   return Container(
+//     color: Colors.white,
+//     child: Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 10),
+//       child: DropdownButton(
+//         isExpanded: true,
+//         value: _selectedDividerColorValue,
+//         // value: appState.app_color_list[_currentIndex],
+//         items: appState.divider_color_text_list.map((value) {
+//           return DropdownMenuItem(
+//             onTap: () {},
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text(
+//                   value,
+//                   style: TextStyle(
+//                     color: Colors.black,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             value: value,
+//           );
+//         }).toList(),
+//         onChanged: (value) {
+//           setState(() {
+//             _currentIndex = appState.divider_color_text_list.indexOf(value.toString());
+//             _selectedDividerColorValue = appState.app_color_text_list[_currentIndex];
+//             appState.setDividerColor(_currentIndex);
+//           });
+//         },
+//       ),
+//     ),
+//   );
+// }
 }

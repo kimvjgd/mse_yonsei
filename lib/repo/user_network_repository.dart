@@ -13,13 +13,13 @@ import 'package:mse_yonsei/repo/helper/transformers.dart';
  */
 
 class UserNetworkRepository extends Transformers {
-  Future<void> attemptCreateUser({required String userKey, required String email}) async {
+  Future<void> attemptCreateUser({String? userKey, String? email}) async {
 
     final DocumentReference userRef = FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey);
 
     DocumentSnapshot snapshot = await userRef.get();
     if(!snapshot.exists) {
-      return await userRef.set(UserModel.getMapForCreateUser(email));
+      return await userRef.set(UserModel.getMapForCreateUser(email!));
     }
   }
 
@@ -27,7 +27,7 @@ class UserNetworkRepository extends Transformers {
     return FirebaseFirestore.instance
         .collection(COLLECTION_USERS)
         .doc(userKey)
-        // .get() 한번만 갖고오면 안된다.
+    // .get() 한번만 갖고오면 안된다.
         .snapshots().transform(toUser);                   // snapshot을 userModel로 바꿔준다.  stream으로 userModel을 불러온다.
   }
 }
