@@ -45,7 +45,7 @@ class _ExpansionScreenState extends State<ExpansionScreen>
     print('@@@expansionscreen');
 
     userKey =
-        Provider.of<UserModelState>(context, listen: false).userModel.userKey!;
+        Provider.of<UserModelState>(context, listen: false).userModel.userKey;
 
     return StreamProvider<List<PostModel>>.value(
       initialData: [],

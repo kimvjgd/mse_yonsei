@@ -53,7 +53,7 @@ class _SignInFormState extends State<SignInForm> {
                   if (text!.isNotEmpty && text.contains("@")) {
                     return null;
                   } else {
-                    return '정확한 이메일 주소를 입력해주세용~';
+                    return '정확한 이메일 주소를 입력해주세요';
                   }
                 },
               ),
@@ -69,7 +69,7 @@ class _SignInFormState extends State<SignInForm> {
                   if (text!.isNotEmpty && text.length > 2) {
                     return null;
                   } else {
-                    return '제대로 된 비밀번호 입력해주세용~';
+                    return '제대로 된 비밀번호 입력해주세요';
                   }
                 },
               ),
@@ -113,8 +113,7 @@ class _SignInFormState extends State<SignInForm> {
         if (_formKey.currentState!.validate()) {
           Provider.of<FirebaseAuthState>(context, listen: false).login(context,
               email: _emailController.text, password: _pwController.text);
-          // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage()));
-
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage()));
         }
       },
       child: Text(

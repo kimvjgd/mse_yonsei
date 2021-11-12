@@ -32,7 +32,7 @@ class _AddCallScreenState extends State<AddCallScreen> {
   @override
   Widget build(BuildContext context) {
 
-    userKey = Provider.of<UserModelState>(context, listen: false).userModel.userKey!;
+    userKey = Provider.of<UserModelState>(context, listen: false).userModel.userKey;
 
     return SafeArea(
       child: Scaffold(

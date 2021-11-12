@@ -32,7 +32,7 @@ class _MyCollectionScreenState extends State<MyCollectionScreen> {
   @override
   Widget build(BuildContext context) {
     userKey =
-        Provider.of<UserModelState>(context, listen: false).userModel.userKey!;
+        Provider.of<UserModelState>(context, listen: false).userModel.userKey;
 
     return StreamProvider<List<PostModel>>.value(
         initialData: [],

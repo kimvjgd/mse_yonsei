@@ -64,13 +64,13 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               TextFormField(
                 controller: _emailController,
-                cursorColor: Colors.black54,
+                cursorColor: Colors.white,
                 decoration: textInputDecor('Email'),
                 validator: (text) {
                   if (text!.isNotEmpty && text.contains("@")) {
                     return null;
                   } else {
-                    return '정확한 이메일 주소를 입력해주세용~';
+                    return '정확한 이메일 주소를 입력해주세요';
                   }
                 },
               ),
@@ -79,7 +79,7 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               TextFormField(
                 controller: _pwController,
-                cursorColor: Colors.black54,
+                cursorColor: Colors.white,
                 obscureText: true,
                 decoration: textInputDecor('Password'),
                 validator: (text) {
@@ -95,14 +95,14 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               TextFormField(
                 controller: _cpwController,
-                cursorColor: Colors.black54,
+                cursorColor: Colors.white,
                 obscureText: true,
                 decoration: textInputDecor('Confirm Password'),
                 validator: (text) {
                   if (text!.isNotEmpty && _pwController.text == text) {
                     return null;
                   } else {
-                    return '입력한 값이 비밀번호와 일치하지 않네요!  입력해주세요';
+                    return '입력한 값이 비밀번호와 일치하지 않습니다.';
                   }
                 },
               ),
@@ -140,12 +140,11 @@ class _SignUpFormState extends State<SignUpForm> {
               email: _emailController.text,
               password: _pwController.text);
           userKey =
-              Provider.of<UserModelState>(context, listen: false).userModel.userKey!;
+              Provider.of<UserModelState>(context, listen: false).userModel.userKey;
           FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').doc('first_$userKey').set({'name':'Welcome, new friend'});
 
-          // Navigator.of(context).pushReplacement(
-          //     MaterialPageRoute(builder: (context) => MyHomePage()));
-          print('@@@signup');
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => MyHomePage()));
         }
       },
       child: Text(
