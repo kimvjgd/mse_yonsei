@@ -12,11 +12,11 @@ class NoticeModel {
 
   NoticeModel.fromMap(Map<String, dynamic>? map, this.postKey,
       {required this.reference})
-      : name = map![KEY_NOTICE_NAME],
-        writer = map[KEY_NOTICE_WRITER],
-        url = map[KEY_NOTICE_URL],
-        description = map[KEY_NOTICE_DESCRIPTION],
-        postTime = map[KEY_NOTICE_DATE] == null
+      : name = map?[KEY_NOTICE_NAME],
+        writer = map?[KEY_NOTICE_WRITER],
+        url = map?[KEY_NOTICE_URL],
+        description = map?[KEY_NOTICE_DESCRIPTION],
+        postTime = map?[KEY_NOTICE_DATE] == null
             ?DateTime.now().toUtc()
             :(map?[KEY_NOTICE_DATE] as Timestamp).toDate();
 

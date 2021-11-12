@@ -137,7 +137,7 @@ class FirebaseAuthState extends ChangeNotifier {
       }
     });             // authStateChanges 는 Stream<User>
   }
-  void registerUser(BuildContext context, {required String email, required String password}) async {
+  Future<void> registerUser(BuildContext context, {required String email, required String password}) async {
     changeFirebaseAuthStatus(FirebaseAuthStatus.progress);
     UserCredential authResult = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password).catchError((error){
       String _message = "";
@@ -171,6 +171,9 @@ class FirebaseAuthState extends ChangeNotifier {
       await userNetworkRepository.attemptCreateUser(userKey: _firebaseUser!.uid, email: _firebaseUser!.email!);
     }
   }
+
+
+
 
   void login(BuildContext context,
       {required String email, required String password}) async {

@@ -45,7 +45,7 @@ class NoticeDetailScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20,),
-              Text(noticeModel.description!,style: TextStyle(fontSize: 17, color: Colors.white),),
+              Text(noticeModel.description!.replaceAll("\\n", "\n"),style: TextStyle(fontSize: 17, color: Colors.white),),
               SizedBox(height: 20,),
               if(noticeModel.url != null && noticeModel.url != '')
                 InkWell(

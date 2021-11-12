@@ -1,12 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mse_yonsei/cosntants/app_color.dart';
 import 'package:mse_yonsei/cosntants/auth_input_decor.dart';
 import 'package:mse_yonsei/cosntants/common_size.dart';
+import 'package:mse_yonsei/cosntants/firestore_keys.dart';
+import 'package:mse_yonsei/home_page.dart';
 import 'package:mse_yonsei/model/firebase_auth_state.dart';
+import 'package:mse_yonsei/model/firestore/user_model.dart';
+import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/widgets/or_divider.dart';
 import 'package:provider/provider.dart';
 import 'package:mse_yonsei/cosntants/screen_size.dart';
-
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -14,7 +19,11 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+
+  String userKey = '';
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late UserModel _userModel;
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pwController = TextEditingController();
@@ -30,6 +39,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<FirebaseAuthState>(context, listen: false).signOut();
+
     return Scaffold(
       backgroundColor: sign_color,
       resizeToAvoidBottomInset: true,
@@ -42,7 +53,12 @@ class _SignUpFormState extends State<SignUpForm> {
               SizedBox(
                 height: 25,
               ),
-              Expanded(child: Image.asset('assets/images/yonsei_mse.png', width: size!.width/1.7, height: size!.width/1.7,)),
+              Expanded(
+                  child: Image.asset(
+                'assets/images/yonsei_mse.png',
+                width: size!.width / 1.7,
+                height: size!.width / 1.7,
+              )),
               SizedBox(
                 height: 50,
               ),
@@ -113,15 +129,40 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
+  // Future<void> sendData(String userKey, String postKey, String name,
+  //     String? number, String? url, String? lab_url, String? professor_url, String? category) {
+  //   return FirebaseFirestore.instance
+  //       .collection(COLLECTION_USERS)
+  //       .doc(userKey)
+  //       .collection('repo')
+  //       .doc(postKey)
+  //       .set({
+  //     'name': name,
+  //     'number': number,
+  //     'url': url,
+  //     'lab_url': lab_url,
+  //     'professor_url': professor_url,
+  //     'category': category,
+  //   });
+  // }
+
   FlatButton _submitButton(BuildContext context) {
     return FlatButton(
       color: Colors.blue,
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          Provider.of<FirebaseAuthState>(context, listen: false).registerUser(
+          await Provider.of<FirebaseAuthState>(context, listen: false).registerUser(
               context,
               email: _emailController.text,
               password: _pwController.text);
+          userKey =
+              Provider.of<UserModelState>(context, listen: false).userModel.userKey;
+
+          // if(FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').)
+          FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').doc('first_$userKey').set({'name':'Welcome, new friend'});
+
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => MyHomePage()));
         }
       },
       child: Text(

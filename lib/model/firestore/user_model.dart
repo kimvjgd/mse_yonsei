@@ -8,8 +8,8 @@ class UserModel {
   final DocumentReference reference;
 
   UserModel.fromMap(Map<String, dynamic>? map, this.userKey, {required this.reference})
-      : email = map![KEY_EMAIL],
-        stu_num = map[KEY_STU_NUMBER];
+      : email = map?[KEY_EMAIL],
+        stu_num = map?[KEY_STU_NUMBER];
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), snapshot.id,

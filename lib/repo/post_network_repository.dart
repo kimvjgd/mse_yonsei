@@ -20,7 +20,18 @@ class PostNetwokRepository with Transformers {
       'lab_url': lab_url,
       'professor_url': professor_url,
       'category': category,
+      'posyKey':postKey,
     });
+  }
+
+  Future<void> deleteDate(String userKey, String postKey) {
+    return FirebaseFirestore.instance
+        .collection(COLLECTION_USERS)
+        .doc(userKey)
+        .collection('repo')
+        .doc(postKey)
+        .delete()
+        .then((_) => print('delete complete'));
   }
 
 

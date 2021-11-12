@@ -17,16 +17,16 @@ class PostModel {
 
   PostModel.fromMap(Map<String, dynamic>? map, this.postKey,
       {required this.reference})
-      : name = map![KEY_NAME],
-        userKey = map[KEY_USERKEY],
-        phone_number = map[KEY_PHONE_NUMBER],
-        new_trigger = map[KEY_NEW_TRIGGER],
-        url = map[KEY_URL],
-        lab_url = map[KEY_LAB_URL],
-        lab_name = map[KEY_LAB_NAME],
-        professor_url = map[KEY_PROFESSOR_URL],
-        professor_name = map[KEY_PROFESSOR_NAME],
-        category = map[KEY_CATEGORY];
+      : name = map?[KEY_NAME],
+        userKey = map?[KEY_USERKEY],
+        phone_number = map?[KEY_PHONE_NUMBER],
+        new_trigger = map?[KEY_NEW_TRIGGER],
+        url = map?[KEY_URL],
+        lab_url = map?[KEY_LAB_URL],
+        lab_name = map?[KEY_LAB_NAME],
+        professor_url = map?[KEY_PROFESSOR_URL],
+        professor_name = map?[KEY_PROFESSOR_NAME],
+        category = map?[KEY_CATEGORY];
 
   PostModel.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), snapshot.id,

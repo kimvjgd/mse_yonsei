@@ -5,6 +5,7 @@ import 'package:mse_yonsei/cosntants/material_color.dart';
 import 'package:mse_yonsei/model/firestore/post_model.dart';
 import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/main_menu_floating_action_button.dart';
+import 'package:mse_yonsei/repo/helper/generate_post_key.dart';
 import 'package:mse_yonsei/repo/post_network_repository.dart';
 import 'package:mse_yonsei/flutter_speed_dial_menu_button.dart';
 import 'package:mse_yonsei/screens/add_url_screen.dart';
@@ -239,6 +240,39 @@ class _MyCollectionScreenState extends State<MyCollectionScreen> {
               ),
             ],
           ),
+              Row(
+                children: [
+                  Spacer(),
+                  InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(child: Icon(CupertinoIcons.repeat, color: Colors.blueGrey,)),
+                    ),
+                    onTap: () async {
+                      // final String postKey = getNewPostKey(Provider.of<UserModelState>(context, listen: false).userModel);
+                      //
+                      // await PostNetwokRepository().sendData(userKey, postKey, item.name!, item.phone_number, item.url, item.lab_url, item.professor_url, item.category);
+                      // Navigator.pop(context);
+                    },
+                  ),
+                  InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(child: Icon(Icons.delete_rounded, color: Colors.redAccent,)),
+                    ),
+                    onTap: () async {
+                      // postKey를 불러와야 하는데...
+                      final String postKey = item.postKey!;
+                      // final String postKey = getNewPostKey(Provider.of<UserModelState>(context, listen: false).userModel);
+
+                      //
+                      await PostNetwokRepository().deleteDate(userKey, postKey);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SizedBox(width: 20,),
+                ],
+              ),
       ],
     ),
   );

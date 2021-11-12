@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mse_yonsei/cosntants/app_color.dart';
 import 'package:mse_yonsei/cosntants/auth_input_decor.dart';
 import 'package:mse_yonsei/cosntants/common_size.dart';
+import 'package:mse_yonsei/home_page.dart';
 import 'package:mse_yonsei/model/firebase_auth_state.dart';
 import 'package:mse_yonsei/widgets/or_divider.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,7 @@ class _SignInFormState extends State<SignInForm> {
               ),
               TextFormField(
                 controller: _emailController,
-                cursorColor: Colors.black54,
+                cursorColor: Colors.white,
                 decoration: textInputDecor('Email'),
                 validator: (text) {
                   if (text!.isNotEmpty && text.contains("@")) {
@@ -61,7 +62,7 @@ class _SignInFormState extends State<SignInForm> {
               ),
               TextFormField(
                 controller: _pwController,
-                cursorColor: Colors.black54,
+                cursorColor: Colors.white,
                 obscureText: true,
                 decoration: textInputDecor('Password'),
                 validator: (text) {
@@ -113,6 +114,8 @@ class _SignInFormState extends State<SignInForm> {
 
           Provider.of<FirebaseAuthState>(context, listen: false).login(context,
               email: _emailController.text, password: _pwController.text);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage()));
+
         }
       },
       child: Text(

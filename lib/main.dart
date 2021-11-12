@@ -1,15 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mse_yonsei/cosntants/app_color.dart';
 import 'package:mse_yonsei/cosntants/material_color.dart';
 import 'package:mse_yonsei/home_page.dart';
 import 'package:mse_yonsei/model/app_state.dart';
 import 'package:mse_yonsei/model/firebase_auth_state.dart';
-import 'package:mse_yonsei/model/post_state.dart';
 import 'package:mse_yonsei/model/user_model_state.dart';
 import 'package:mse_yonsei/repo/user_network_repository.dart';
 import 'package:mse_yonsei/screens/auth_screen.dart';
-import 'package:mse_yonsei/examples_deleted_soon/practice_screen.dart';
 import 'package:mse_yonsei/widgets/my_progress_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +20,6 @@ class MyApp extends StatelessWidget {
   Widget _currentWidget = MyHomePage();
   FirebaseAuthState _firebaseAuthState = FirebaseAuthState();
   UserModelState _userModelState = UserModelState();
-  PostState _postState = PostState();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +29,6 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<PostState>.value(value: _postState),
         ChangeNotifierProvider<AppState>(create: (_)=>AppState()),
         ChangeNotifierProvider<FirebaseAuthState>.value(value: _firebaseAuthState),
         ChangeNotifierProvider<UserModelState>.value(value: _userModelState)
