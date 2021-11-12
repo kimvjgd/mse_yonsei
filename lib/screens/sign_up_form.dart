@@ -65,6 +65,7 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 controller: _emailController,
                 cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white70),
                 decoration: textInputDecor('Email'),
                 validator: (text) {
                   if (text!.isNotEmpty && text.contains("@")) {
@@ -80,6 +81,7 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 controller: _pwController,
                 cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white70),
                 obscureText: true,
                 decoration: textInputDecor('Password'),
                 validator: (text) {
@@ -96,6 +98,7 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 controller: _cpwController,
                 cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white70),
                 obscureText: true,
                 decoration: textInputDecor('Confirm Password'),
                 validator: (text) {

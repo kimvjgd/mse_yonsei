@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mse_yonsei/cosntants/material_color.dart';
 import 'package:mse_yonsei/home_page.dart';
 import 'package:mse_yonsei/model/app_state.dart';
@@ -13,7 +14,11 @@ import 'package:provider/provider.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
+
   runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
