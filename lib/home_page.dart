@@ -24,23 +24,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    userKey =
-        Provider.of<UserModelState>(context, listen: false).userModel.userKey;
-
-
-
-
-
-
-
-    // if(FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').)
-      FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').doc('first_$userKey').set({'name':'Welcome, new friend'});
-
-
-
-
-
-
 
     if (size == null) size = MediaQuery
         .of(context)

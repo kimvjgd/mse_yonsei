@@ -111,10 +111,9 @@ class _SignInFormState extends State<SignInForm> {
       color: Colors.blue,
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-
           Provider.of<FirebaseAuthState>(context, listen: false).login(context,
               email: _emailController.text, password: _pwController.text);
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage()));
+          // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyHomePage()));
 
         }
       },

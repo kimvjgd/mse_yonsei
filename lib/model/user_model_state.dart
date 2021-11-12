@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mse_yonsei/model/firestore/user_model.dart';
 
 class UserModelState extends ChangeNotifier {
-  UserModel? _userModel;
+  UserModel? _userModel ;
   StreamSubscription<UserModel>? _currentStreamSub;         // usermodel을 stream으로 계속 불러옵니다.    logout누르면 stream이 logout을 읽어와줌
   UserModel get userModel => _userModel!;
 

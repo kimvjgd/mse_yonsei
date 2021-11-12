@@ -17,7 +17,7 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-  Widget _currentWidget = MyHomePage();
+  Widget? _currentWidget;
   FirebaseAuthState _firebaseAuthState = FirebaseAuthState();
   UserModelState _userModelState = UserModelState();
 
@@ -43,14 +43,17 @@ class MyApp extends StatelessWidget {
           // return PracticeScreen();
           switch (firebaseAuthState!.firebaseAuthStatus) {
             case FirebaseAuthStatus.signout:
+              print('@@@signout');
               _clearUserModel(context);
               _currentWidget = AuthScreen();
               break;
             case FirebaseAuthStatus.signin:
+              print('@@@signin');
               _initUserModel(firebaseAuthState, context);
               _currentWidget = MyHomePage();
               break;
             default:
+              print('@@@progressindicator');
               _currentWidget = MyProgressIndicator(containerSize: 20);
           }
           return AnimatedSwitcher(
@@ -69,11 +72,14 @@ class MyApp extends StatelessWidget {
         .getUserModelStream(firebaseAuthState.firebaseUser!.uid)              // getUserModelStream은 userModel을 stream으로 계속 불러온다.
         .listen((userModel) {
       userModelState.userModel = userModel;                                   // userModelState의 userModel을 getUserModelStream으로 계속 불러오는 userModel로 계속 바꿔준다.
+      print('@@@initUserModel');
+
     });
   }
 
   void _clearUserModel(BuildContext context) {
     UserModelState userModelState = Provider.of<UserModelState>(context, listen: false);
     userModelState.clear();
+    print('@@@clear');
   }
 }

@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mse_yonsei/cosntants/firestore_keys.dart';
 
 class UserModel {
-  final String userKey;
-  final String email;
-  final String stu_num;
-  final DocumentReference reference;
+  final String? userKey;
+  final String? email;
+  final String? stu_num;
+  final DocumentReference? reference;
 
   UserModel.fromMap(Map<String, dynamic>? map, this.userKey, {required this.reference})
-      : email = map?[KEY_EMAIL],
-        stu_num = map?[KEY_STU_NUMBER];
+      : email = map![KEY_EMAIL],
+        stu_num = map[KEY_STU_NUMBER];
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), snapshot.id,
@@ -22,5 +22,5 @@ class UserModel {
     map[KEY_STU_NUMBER] = '';
     return map;
   }
-
+  UserModel({this.userKey, this.email, this.stu_num, this.reference});
 }

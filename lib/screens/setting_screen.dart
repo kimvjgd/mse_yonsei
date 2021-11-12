@@ -168,8 +168,8 @@ class _SettingScreenState extends State<SettingScreen> {
     return Container(
       color: Colors.white,
       child: ListTile(
-        onTap: () async{
-          await Provider.of<FirebaseAuthState>(context, listen: false).signOut();
+        onTap: () {
+          Provider.of<FirebaseAuthState>(context, listen: false).signOut();
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>AuthScreen()));
         },
         title: Text(

@@ -86,7 +86,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   if (text!.isNotEmpty && text.length > 2) {
                     return null;
                   } else {
-                    return '제대로 된 비밀번호 입력해주세용~';
+                    return '제대로 된 비밀번호 입력해주세요';
                   }
                 },
               ),
@@ -102,7 +102,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   if (text!.isNotEmpty && _pwController.text == text) {
                     return null;
                   } else {
-                    return '입력한 값이 비밀번호와 일치하지 않네요!  입력해주세용~';
+                    return '입력한 값이 비밀번호와 일치하지 않네요!  입력해주세요';
                   }
                 },
               ),
@@ -129,22 +129,6 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  // Future<void> sendData(String userKey, String postKey, String name,
-  //     String? number, String? url, String? lab_url, String? professor_url, String? category) {
-  //   return FirebaseFirestore.instance
-  //       .collection(COLLECTION_USERS)
-  //       .doc(userKey)
-  //       .collection('repo')
-  //       .doc(postKey)
-  //       .set({
-  //     'name': name,
-  //     'number': number,
-  //     'url': url,
-  //     'lab_url': lab_url,
-  //     'professor_url': professor_url,
-  //     'category': category,
-  //   });
-  // }
 
   FlatButton _submitButton(BuildContext context) {
     return FlatButton(
@@ -156,13 +140,12 @@ class _SignUpFormState extends State<SignUpForm> {
               email: _emailController.text,
               password: _pwController.text);
           userKey =
-              Provider.of<UserModelState>(context, listen: false).userModel.userKey;
-
-          // if(FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').)
+              Provider.of<UserModelState>(context, listen: false).userModel.userKey!;
           FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').doc('first_$userKey').set({'name':'Welcome, new friend'});
 
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => MyHomePage()));
+          // Navigator.of(context).pushReplacement(
+          //     MaterialPageRoute(builder: (context) => MyHomePage()));
+          print('@@@signup');
         }
       },
       child: Text(

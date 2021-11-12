@@ -41,8 +41,11 @@ class _ExpansionScreenState extends State<ExpansionScreen>
 
   @override
   Widget build(BuildContext context) {
+
+    print('@@@expansionscreen');
+
     userKey =
-        Provider.of<UserModelState>(context, listen: false).userModel.userKey;
+        Provider.of<UserModelState>(context, listen: false).userModel.userKey!;
 
     return StreamProvider<List<PostModel>>.value(
       initialData: [],
