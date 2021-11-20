@@ -25,11 +25,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
+    repoConfirm();
+
     if (size == null) size = MediaQuery
         .of(context)
         .size;
     return Scaffold(
-          body: ExpansionScreen(),
-        );
+      body: ExpansionScreen(),
+    );
+  }
+
+
+  void repoConfirm() async{
+    userKey =
+        Provider.of<UserModelState>(context, listen: false).userModel.userKey;
+
+    final snapshot = await FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').get();
+    if(snapshot.docs.length == 0){
+      await FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').doc('first_$userKey').set({'name':'Welcome, new friend'});
+    }
   }
 }

@@ -144,7 +144,7 @@ class _SignUpFormState extends State<SignUpForm> {
               password: _pwController.text);
           userKey =
               Provider.of<UserModelState>(context, listen: false).userModel.userKey;
-          FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').doc('first_$userKey').set({'name':'Welcome, new friend'});
+          await FirebaseFirestore.instance.collection(COLLECTION_USERS).doc(userKey).collection('repo').doc('first_$userKey').set({'name':'Welcome, new friend'});
 
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => MyHomePage()));

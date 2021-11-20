@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AppState>(create: (_)=>AppState()),
         ChangeNotifierProvider<FirebaseAuthState>.value(value: _firebaseAuthState),
-        ChangeNotifierProvider<UserModelState>.value(value: _userModelState)
+        ChangeNotifierProvider<UserModelState>.value(value: _userModelState),
       ],
       child: MaterialApp(
         theme: ThemeData(
